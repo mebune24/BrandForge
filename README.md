@@ -32,31 +32,8 @@ To optimize production scaling, the company will roll out an online design engin
 ## 2. Technology Section## 2.1 Core Infrastructure Architecture
 BrandForge utilizes a decoupled microservices infrastructure to handle heavy graphical processing (mockups) separate from web client browsing.
 
-┌────────────────────────────────────────────────────────┐
-│                      Client Tier                       │
-│     Web Front-end (React)  /  Mobile Web App           │
-└───────────────────────────┬────────────────────────────┘
-                            │ (HTTPS / GraphQL)
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                     API Gateway                        │
-│          Routing, Auth, Rate Limiting (Kong)           │
-└───────────────────────────┬────────────────────────────┘
-                            │
-         ┌──────────────────┴──────────────────┐
-         ▼                                     ▼
-┌──────────────────┐                  ┌──────────────────┐
-│   Order & User   │                  │  Design & Asset  │
-│  Microservice    │                  │   Microservice   │
-│   (Node.js)      │                  │     (Python)     │
-└────────┬─────────┘                  └────────┬─────────┘
-         │                                     │
-         ▼                                     ▼
-┌──────────────────┐                  ┌──────────────────┐
-│  Transactional   │                  │   Object Storage │
-│     Database     │                  │  (Vector/Raster  │
-│   (PostgreSQL)   │                  │   Assets - S3)   │
-└──────────────────┘                  └──────────────────┘
+Client Tier ──(HTTPS/GraphQL)──► API Gateway ──► Microservices ──► Databases/Storage
+
 
 ## 2.2 Technology Stack
 
@@ -64,34 +41,8 @@ BrandForge utilizes a decoupled microservices infrastructure to handle heavy gra
 * Backend: Node.js (Express) for order workflows; Python (FastAPI) for automated image vectorization and print-sizing adjustments.
 * Database: PostgreSQL for relational transactional data; Redis for active session caching.
 * Storage: Amazon S3 for storing high-resolution print vectors, print-ready PDFs, and client assets.
+##2.3 Process diagram
+[ Customer Uploads Design ] ──► [ Automated Quality Check ] ──(Passes Check)──► [ Secure Payment Gateway ] ──► [ Order Management System ] ──► [ Asset Pipeline / Inventory Allocation ] ──► [ Printing Floor Execution ] ──► [ Quality Assurance Control ] ──► [ Doorstep Logistics Delivery ]
+If you want to map out exception handling or bottlenecks, let me know if we should define the re-upload alert loop or the inventory shortage fallback path.
 
-------------------------------
-## 3. Process Diagram
-Our automated fulfillment pipeline maps how a digital customer design moves from checkout straight to the physical printing floor:
 
-[ Customer Uploads Design ]
-           │
-           ▼
-[ Automated Quality Check ] ───(Fails Resolution)───► [ Alert: Re-upload Asset ]
-           │
-     (Passes Check)
-           ▼
-[ Secure Payment Gateway ]
-           │
-           ▼
-[ Order Management System (OMS) ]
-           │
-     ┌─────┴─────────────────────────────────────┐
-     ▼                                           ▼
-(Digital Asset Pipeline)               (Inventory Pipeline)
-[ Vector Generation & ]                [ Automated Blank Stock ]
-[ Production Blueprint ]               [ Allocation & Routing ]
-     └─────┬─────────────────────────────────────┘
-           │
-           ▼
-[ Printing Floor Execution ] ───► [ Quality Assurance Control ]
-                                               │
-                                               ▼
-                                 [ Doorstep Logistics Delivery ]
-
--
