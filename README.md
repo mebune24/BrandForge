@@ -1,8 +1,6 @@
-# BrandForge Backend (Node.js + Express + MongoDB)
+﻿# BrandForge Backend (Node.js + Express + MongoDB)
 
-This is the backend API for the BrandForge Technologies platform. It handles user
-accounts, products, and orders (with a simple quotation + status-tracking flow),
-so the React frontend can talk to it.
+This is the backend API for the BrandForge Technologies platform. It handles user accounts, products, and orders (with a simple quotation + status-tracking flow), so the React frontend can talk to it.
 
 ## Tech Stack
 - Node.js + Express — the server and API routes
@@ -33,13 +31,9 @@ Copy `.env.example` to `.env` and fill in your own values:
 ```bash
 cp .env.example .env
 ```
-- `MONGO_URI`: your MongoDB connection string. For local development you can
-  install MongoDB Community Server and use `mongodb://localhost:27017/brandforge`.
-  For a free cloud database, create a cluster on MongoDB Atlas and paste its
-  connection string here instead.
+- `MONGO_URI`: your MongoDB connection string. For local development you can install MongoDB Community Server and use `mongodb://localhost:27017/brandforge`. For a free cloud database, create a cluster on MongoDB Atlas and paste its connection string here instead.
 - `JWT_SECRET`: any long random string (used to sign login tokens).
-- `CLIENT_URL`: the URL your React app runs on (e.g. `http://localhost:3000`),
-  used for CORS.
+- `CLIENT_URL`: the URL your React app runs on (e.g. `http://localhost:3000`), used for CORS.
 
 ## 3. Run the server
 ```bash
@@ -74,10 +68,8 @@ git branch -M main
 git remote add origin <your-repo-url>
 git push -u origin main
 ```
-Important: `.env` is already listed in `.gitignore`, so your real secrets will
-never be pushed — only `.env.example` (with placeholder values) goes to GitHub.
-Your teammate should pull the repo, run `npm install`, copy `.env.example` to
-`.env` themselves, and fill in their own values.
+Important: `.env` is already listed in `.gitignore`, so your real secrets will never be pushed — only `.env.example` (with placeholder values) goes to GitHub.
+Your teammate should pull the repo, run `npm install`, copy `.env.example` to `.env` themselves, and fill in their own values.
 
 ## Next steps (as the project grows)
 - Add file upload handling (e.g. multer + cloud storage) for design/logo uploads
