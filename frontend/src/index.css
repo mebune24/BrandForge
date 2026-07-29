@@ -1,1 +1,53 @@
 @import "tailwindcss";
+
+
+/* index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --dark-blue-primary: #0a1628;
+    --dark-blue-secondary: #0f1f3a;
+    --dark-blue-card: #132a4a;
+    --dark-blue-border: #1a3a5c;
+    --blue-accent: #4a9eff;
+  }
+}
+
+@layer utilities {
+  .bg-dark-blue-primary { background-color: #0a1628; }
+  .bg-dark-blue-secondary { background-color: #0f1f3a; }
+  .bg-dark-blue-card { background-color: #132a4a; }
+  .border-dark-blue-border { border-color: #1a3a5c; }
+  .text-blue-accent { color: #4a9eff; }
+  .bg-blue-accent { background-color: #4a9eff; }
+  .text-dark-blue-primary { color: #0a1628; }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-frames {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee linear infinite;
+}
+
+.animate-marquee-frames {
+  animation: marquee-frames 40s linear infinite;
+}
