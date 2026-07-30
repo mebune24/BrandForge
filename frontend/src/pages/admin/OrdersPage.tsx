@@ -57,7 +57,7 @@ const AdminOrdersPage: React.FC = () => {
                     {order.items.length} item(s)
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-dark-blue-primary">
-                    FCFA{order.totalAmount.toFixed(2)}
+                    FCFA{order.totalAmount.toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select

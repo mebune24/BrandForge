@@ -62,10 +62,10 @@ export default function ArtworkUploadPage() {
       productId: 'artwork-upload',
       productName: designName || 'Custom Artwork',
       productImage: uploadedImage,
-      basePrice: 29.99,
-      quantity: 1,
-      designUrl: uploadedImage,
-      unitPrice: 29.99,
+       basePrice: 30000,
+       quantity: 1,
+       designUrl: uploadedImage,
+       unitPrice: 30000,
     });
   };
 
@@ -217,7 +217,7 @@ export default function ArtworkUploadPage() {
                     >
                       Save to Cart
                     </button>
-                    <p className="text-xs text-gray-400 text-center">FCFA29.99</p>
+                    <p className="text-xs text-gray-400 text-center">FCFA 30,000</p>
                   </div>
                 ) : (
                   <div className="text-center py-8">
