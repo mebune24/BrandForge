@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getMyOrders, getAllOrders, createOrder, trackOrder, updateOrderStatus } from '../services/orders';
+import { getMyOrders, getAllOrders, createOrder, trackOrder, updateOrderStatus, getStaffOrders } from '../services/orders';
 import { useAuth } from '../context/AuthContext';
 import { useApp } from '../context/AppContext';
 import type { Order, CreateOrderInput } from '../types';
@@ -60,6 +60,51 @@ export function useOrders(isAdmin = false) {
   };
 
   return { orders, loading, error, fetchOrders, placeOrder, changeOrderStatus };
+}
+
+export function useStaffOrders() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { token, isAuthenticated, user } = useAuth();
+  const { addNotification } = useApp();
+
+  const fetchOrders = useCallback(async () => {
+    if (!token || !user) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getStaffOrders(token);
+      setOrders(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch staff orders');
+    } finally {
+      setLoading(false);
+    }
+  }, [token, user]);
+
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
+    if (isAuthenticated && user?.role === 'staff') {
+      fetchOrders();
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [isAuthenticated, user, fetchOrders]);
+
+  const changeOrderStatus = async (id: string, status: string) => {
+    if (!token) throw new Error('Not authenticated');
+    try {
+      const updated = await updateOrderStatus(id, status, token);
+      setOrders(prev => prev.map(o => o._id === id ? updated : o));
+      addNotification(`Order ${updated.orderCode} status updated to ${status}`, 'success');
+      return updated;
+    } catch (err) {
+      addNotification(err instanceof Error ? err.message : 'Failed to update order status', 'error');
+      throw err;
+    }
+  };
+
+  return { orders, loading, error, fetchOrders, changeOrderStatus };
 }
 
 export function useOrderTracking(orderCode: string | null) {

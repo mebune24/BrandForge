@@ -49,6 +49,19 @@ const defaultBlogPosts = [
   { id: 2, title: 'How Digital Workflows Are Revolutionizing Production', excerpt: 'Automation and AI are transforming the way we approach custom apparel manufacturing.', image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&h=400&fit=crop', date: 'July 22, 2026', category: 'Technology', content: 'Full article content here...' },
 ];
 
+const demoUsers: StoredUser[] = [
+  { _id: 'staff-1', name: 'John Staff', email: 'john@brandforge.com', password: 'staff123', phone: '+237 600 000 001', role: 'staff', createdAt: new Date().toISOString() },
+  { _id: 'staff-2', name: 'Jane Staff', email: 'jane@brandforge.com', password: 'staff123', phone: '+237 600 000 002', role: 'staff', createdAt: new Date().toISOString() },
+  { _id: 'admin-1', name: 'Super Admin', email: 'admin@brandforge.com', password: 'admin123', phone: '+237 600 000 000', role: 'admin', createdAt: new Date().toISOString() },
+];
+
+export function seedDemoUsers() {
+  const stored = getStorage<StoredUser[]>(STORAGE_KEYS.users, []);
+  if (stored.length === 0) {
+    setStorage(STORAGE_KEYS.users, demoUsers);
+  }
+}
+
 export const simulatedApi = {
   auth: {
     register: (data: { name: string; email: string; password: string; phone?: string }) => {
@@ -87,6 +100,10 @@ export const simulatedApi = {
 
     getCurrentUser: (): StoredUser | null => {
       return getStorage<StoredUser | null>(STORAGE_KEYS.currentUser, null);
+    },
+
+    getAllUsers: (): StoredUser[] => {
+      return getStorage<StoredUser[]>(STORAGE_KEYS.users, []);
     },
 
     logout: () => {
@@ -153,6 +170,10 @@ export const simulatedApi = {
       return simulatedApi.orders.getAll().find((o) => o.orderCode === code);
     },
 
+    getStaffOrders: (staffId: string): Order[] => {
+      return simulatedApi.orders.getAll().filter((o) => o.staffId === staffId);
+    },
+
     create: (data: CreateOrderInput, customerId: string): Order => {
       const orders = simulatedApi.orders.getAll();
       const orderCode = 'BF-' + Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -181,6 +202,15 @@ export const simulatedApi = {
       orders.unshift(newOrder);
       setStorage(STORAGE_KEYS.orders, orders);
       return newOrder;
+    },
+
+    assignStaff: (orderId: string, staffId: string, staffName: string): Order | undefined => {
+      const orders = simulatedApi.orders.getAll();
+      const index = orders.findIndex((o) => o._id === orderId);
+      if (index === -1) return undefined;
+      orders[index] = { ...orders[index], staffId, assignedStaffName: staffName, updatedAt: new Date().toISOString() };
+      setStorage(STORAGE_KEYS.orders, orders);
+      return orders[index];
     },
 
     updateStatus: (id: string, status: string): Order | undefined => {
@@ -231,10 +261,90 @@ export const simulatedApi = {
   },
 };
 
-export function saveSimulatedOrder(order: Order) {
-  const orders = simulatedApi.orders.getAll();
-  orders.unshift(order);
-  setStorage(STORAGE_KEYS.orders, orders);
+const demoOrders: Order[] = [
+  {
+    _id: 'order-1',
+    orderCode: 'BF-1B79LGVQ',
+    customer: 'guest',
+    items: [{ product: '1', productName: 'Classic T-Shirt', quantity: 2, color: 'White', size: 'L', printingOption: 'screen_printing', unitPrice: 15000 }],
+    totalAmount: 30000,
+    status: 'pending_payment',
+    deliveryAddress: '123 Main St, Douala',
+    staffId: 'staff-1',
+    assignedStaffName: 'John Staff',
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+  },
+  {
+    _id: 'order-2',
+    orderCode: 'BF-KB7SGCCN',
+    customer: 'guest',
+    items: [{ product: '2', productName: 'Premium Polo', quantity: 1, color: 'Navy', size: 'M', printingOption: 'embroidery', unitPrice: 25000 }],
+    totalAmount: 25000,
+    status: 'paid',
+    deliveryAddress: '456 Oak Ave, Yaounde',
+    staffId: 'staff-1',
+    assignedStaffName: 'John Staff',
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    _id: 'order-3',
+    orderCode: 'BF-PE2HLS0Y',
+    customer: 'guest',
+    items: [{ product: '3', productName: 'Hoodie', quantity: 3, color: 'Black', size: 'XL', printingOption: 'dtf', unitPrice: 35000 }],
+    totalAmount: 105000,
+    status: 'in_design',
+    deliveryAddress: '789 Pine Rd, Buea',
+    staffId: 'staff-2',
+    assignedStaffName: 'Jane Staff',
+    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    _id: 'order-4',
+    orderCode: 'BF-84M1IVZI',
+    customer: 'guest',
+    items: [{ product: '11', productName: 'Executive Polo', quantity: 10, color: 'White', size: 'L', printingOption: 'embroidery', unitPrice: 35000 }],
+    totalAmount: 350000,
+    status: 'in_production',
+    deliveryAddress: '321 Elm St, Bamenda',
+    staffId: 'staff-2',
+    assignedStaffName: 'Jane Staff',
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 4).toISOString(),
+  },
+  {
+    _id: 'order-5',
+    orderCode: 'BF-X9Y2ZW3K',
+    customer: 'guest',
+    items: [{ product: '5', productName: 'Tote Bag', quantity: 50, color: 'Natural', size: 'Standard', printingOption: 'screen_printing', unitPrice: 8000 }],
+    totalAmount: 400000,
+    status: 'pending_payment',
+    deliveryAddress: '654 Cedar Ln, Limbe',
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000).toISOString(),
+  },
+  {
+    _id: 'order-6',
+    orderCode: 'BF-M3N4OP5Q',
+    customer: 'guest',
+    items: [{ product: '6', productName: 'Mug', quantity: 100, color: 'White', size: '11oz', printingOption: 'sublimation', unitPrice: 10000 }],
+    totalAmount: 1000000,
+    status: 'paid',
+    deliveryAddress: '987 Birch Blvd, Kumba',
+    staffId: 'staff-1',
+    assignedStaffName: 'John Staff',
+    createdAt: new Date(Date.now() - 86400000 * 7).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 6).toISOString(),
+  },
+];
+
+export function seedDemoOrders() {
+  const stored = getStorage<Order[]>(STORAGE_KEYS.orders, []);
+  if (stored.length === 0) {
+    setStorage(STORAGE_KEYS.orders, demoOrders);
+  }
 }
 
 export function getSimulatedOrders(): Order[] {

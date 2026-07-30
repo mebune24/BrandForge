@@ -45,3 +45,9 @@ export const adminRoutes = [
   { path: 'finance', element: lazy(() => import('../pages/admin/FinancialReportsPage')) },
   { path: 'notifications', element: lazy(() => import('../pages/admin/AdminNotificationsPage')) },
 ];
+
+export const staffRoutes = [
+  { path: '', element: lazy(() => import('../pages/staff/StaffDashboard')), index: true },
+  { path: 'orders', element: lazy(() => import('../pages/staff/StaffOrdersPage')) },
+  { path: 'customers', element: lazy(() => import('../pages/staff/StaffCustomersPage')) },
+];

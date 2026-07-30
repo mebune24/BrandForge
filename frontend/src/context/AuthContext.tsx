@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from '
 import type { User } from '../types';
 import { getCurrentUser, loginUser, registerUser } from '../services/auth';
 import { safeGetItem, safeSetItem, safeRemoveItem } from '../utils/storage';
+import { seedDemoOrders, seedDemoUsers } from '../services/simulatedApi';
 
 interface AuthContextType {
   user: User | null;
@@ -24,6 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
+      seedDemoUsers();
+      seedDemoOrders();
       const storedToken = safeGetItem('token');
       if (storedToken) {
         try {

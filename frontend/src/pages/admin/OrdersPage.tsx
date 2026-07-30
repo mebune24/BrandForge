@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useOrders } from '../../hooks/useOrders';
 import { useAdminNotifications } from '../../context/AdminNotificationContext';
+import { simulatedApi } from '../../services/simulatedApi';
+import type { User } from '../../types';
 
 const AdminOrdersPage: React.FC = () => {
   const { orders, loading, changeOrderStatus } = useOrders(true);
   const { addNotification } = useAdminNotifications();
+  const staffUsers = (() => {
+    const users = simulatedApi.auth.getAllUsers?.() || [];
+    return users.filter((u: User) => u.role === 'staff' || u.role === 'admin');
+  })();
+
+  const [assigningOrderId, setAssigningOrderId] = useState<string | null>(null);
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -33,6 +41,21 @@ const AdminOrdersPage: React.FC = () => {
     }
   };
 
+  const handleAssignStaff = async (orderId: string, staffId: string, staffName: string) => {
+    try {
+      const order = orders.find(o => o._id === orderId);
+      await simulatedApi.orders.assignStaff(orderId, staffId, staffName);
+      addNotification(
+        `Order ${order?.orderCode} assigned to ${staffName}`,
+        'order_update',
+        `order:${orderId}`
+      );
+      setAssigningOrderId(null);
+    } catch {
+      addNotification('Failed to assign staff', 'system');
+    }
+  };
+
   if (loading) {
     return <div className="text-center py-12 text-gray-600">Loading orders...</div>;
   }
@@ -50,6 +73,7 @@ const AdminOrdersPage: React.FC = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned Staff</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
@@ -73,7 +97,7 @@ const AdminOrdersPage: React.FC = () => {
                     <select
                       value={order.status}
                       onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                       className={`text-xs px-2 py-1 rounded-full border-0 font-semibold ${getStatusColor(order.status)}`}
+                      className={`text-xs px-2 py-1 rounded-full border-0 font-semibold ${getStatusColor(order.status)}`}
                     >
                       <option value="pending_payment">Pending Payment</option>
                       <option value="paid">Paid</option>
@@ -85,6 +109,38 @@ const AdminOrdersPage: React.FC = () => {
                       <option value="delivered">Delivered</option>
                       <option value="cancelled">Cancelled</option>
                     </select>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {assigningOrderId === order._id ? (
+                      <div className="flex items-center gap-2">
+                        <select
+                          autoFocus
+                          onChange={(e) => {
+                            const staff = staffUsers.find((s: User) => s._id === e.target.value);
+                            if (staff) {
+                              handleAssignStaff(order._id, staff._id, staff.name);
+                            }
+                          }}
+                          onBlur={() => setAssigningOrderId(null)}
+                          className="text-xs border border-gray-300 rounded-lg px-2 py-1"
+                        >
+                          <option value="">Select staff...</option>
+                          {staffUsers.map((staff: User) => (
+                            <option key={staff._id} value={staff._id}>{staff.name} ({staff.role})</option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <span>{order.assignedStaffName || 'Unassigned'}</span>
+                        <button
+                          onClick={() => setAssigningOrderId(order._id)}
+                          className="text-blue-accent hover:text-blue-600 text-xs"
+                        >
+                          {order.staffId ? 'Reassign' : 'Assign'}
+                        </button>
+                      </div>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {new Date(order.createdAt).toLocaleDateString()}

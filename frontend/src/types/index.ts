@@ -42,6 +42,8 @@ export interface Order {
   status: 'pending_payment' | 'paid' | 'in_design' | 'in_production' | 'quality_check' | 'packaging' | 'out_for_delivery' | 'delivered' | 'cancelled';
   deliveryAddress: string;
   paymentReference?: string;
+  staffId?: string;
+  assignedStaffName?: string;
   createdAt: string;
   updatedAt: string;
 }

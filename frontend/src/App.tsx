@@ -7,10 +7,12 @@ import { SubscriptionProvider } from './context/SubscriptionContext';
 import { AdminNotificationProvider } from './context/AdminNotificationContext';
 import Layout from './components/layout/Layout';
 import AdminLayout from './pages/admin/AdminLayout';
+import StaffLayout from './pages/staff/StaffLayout';
 import { ErrorBoundary } from './components/error-boundary/ErrorBoundary';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AdminRoute from './routes/AdminRoute';
-import { publicRoutes, protectedRoutes, adminRoutes } from './routes';
+import StaffRoute from './routes/StaffRoute';
+import { publicRoutes, protectedRoutes, adminRoutes, staffRoutes } from './routes';
 
 const App: React.FC = () => {
   return (
@@ -50,6 +52,24 @@ const App: React.FC = () => {
                         }
                       >
                         {adminRoutes.map((route) => (
+                          <Route
+                            key={route.path}
+                            index={route.index}
+                            path={route.path}
+                            element={<route.element />}
+                          />
+                        ))}
+                      </Route>
+
+                      <Route
+                        path="/staff"
+                        element={
+                          <StaffRoute>
+                            <StaffLayout />
+                          </StaffRoute>
+                        }
+                      >
+                        {staffRoutes.map((route) => (
                           <Route
                             key={route.path}
                             index={route.index}
