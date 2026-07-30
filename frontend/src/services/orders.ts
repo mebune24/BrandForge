@@ -1,22 +1,34 @@
-import { apiPost, apiGet, apiPut } from './api';
+import { simulatedApi } from './simulatedApi';
 import type { Order, CreateOrderInput } from '../types';
 
-export async function createOrder(data: CreateOrderInput, token: string): Promise<Order> {
-  return apiPost<Order>('/orders', data, token);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function createOrder(data: CreateOrderInput, _token: string): Promise<Order> {
+  const user = simulatedApi.auth.getCurrentUser();
+  const customerId = user?._id || 'guest';
+  return simulatedApi.orders.create(data, customerId);
 }
 
-export async function getMyOrders(token: string): Promise<Order[]> {
-  return apiGet<Order[]>('/orders/mine', token);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function getMyOrders(_token: string): Promise<Order[]> {
+  const user = simulatedApi.auth.getCurrentUser();
+  if (!user) return [];
+  return simulatedApi.orders.getMine(user._id);
 }
 
-export async function getAllOrders(token: string): Promise<Order[]> {
-  return apiGet<Order[]>('/orders', token);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function getAllOrders(_token: string): Promise<Order[]> {
+  return simulatedApi.orders.getAll();
 }
 
 export async function trackOrder(orderCode: string): Promise<Order> {
-  return apiGet<Order>(`/orders/track/${orderCode}`);
+  const order = simulatedApi.orders.getByCode(orderCode);
+  if (!order) throw new Error('Order not found');
+  return order;
 }
 
-export async function updateOrderStatus(id: string, status: string, token: string): Promise<Order> {
-  return apiPut<Order>(`/orders/${id}/status`, { status }, token);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function updateOrderStatus(id: string, status: string, _token: string): Promise<Order> {
+  const order = simulatedApi.orders.updateStatus(id, status);
+  if (!order) throw new Error('Order not found');
+  return order;
 }

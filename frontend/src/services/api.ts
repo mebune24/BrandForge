@@ -1,69 +1,53 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { simulatedApi } from './simulatedApi';
+import type { CreateProductInput, CreateOrderInput } from '../types';
 
-async function handleResponse<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ message: 'An error occurred' }));
-    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+export async function apiGet<T>(endpoint: string): Promise<T> {
+  if (endpoint === '/products') return simulatedApi.products.getAll() as T;
+  if (endpoint.startsWith('/products/')) return simulatedApi.products.getById(endpoint.replace('/products/', '')) as T;
+  if (endpoint === '/orders') return simulatedApi.orders.getAll() as T;
+  if (endpoint === '/orders/mine') {
+    const user = simulatedApi.auth.getCurrentUser();
+    return simulatedApi.orders.getMine(user?._id || 'guest') as T;
   }
-  return response.json();
+  if (endpoint.startsWith('/orders/track/')) return simulatedApi.orders.getByCode(endpoint.replace('/orders/track/', '')) as T;
+  if (endpoint === '/auth/me') {
+    const user = simulatedApi.auth.getCurrentUser();
+    if (!user) throw new Error('Not authenticated');
+    return user as T;
+  }
+  throw new Error(`Unknown GET endpoint: ${endpoint}`);
 }
 
-export async function apiGet<T>(endpoint: string, token?: string): Promise<T> {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function apiPost<T>(endpoint: string, data: unknown, _token?: string): Promise<T> {
+  if (endpoint === '/auth/register') return simulatedApi.auth.register(data as { name: string; email: string; password: string; phone?: string }) as T;
+  if (endpoint === '/auth/login') return simulatedApi.auth.login(data as { email: string; password: string }) as T;
+  if (endpoint === '/products') return simulatedApi.products.create(data as CreateProductInput) as T;
+  if (endpoint === '/orders') {
+    const user = simulatedApi.auth.getCurrentUser();
+    return simulatedApi.orders.create(data as CreateOrderInput, user?._id || 'guest') as T;
   }
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: 'GET',
-    headers,
-  });
-  return handleResponse<T>(response);
+  throw new Error(`Unknown POST endpoint: ${endpoint}`);
 }
 
-export async function apiPost<T>(endpoint: string, data: unknown, token?: string): Promise<T> {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function apiPut<T>(endpoint: string, data: unknown, _token?: string): Promise<T> {
+  if (endpoint.startsWith('/products/')) return simulatedApi.products.update(endpoint.replace('/products/', ''), data as Partial<CreateProductInput>) as T;
+  if (endpoint.startsWith('/orders/') && endpoint.endsWith('/status')) {
+    const id = endpoint.replace('/orders/', '').replace('/status', '');
+    return simulatedApi.orders.updateStatus(id, (data as { status: string }).status) as T;
   }
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(data),
-  });
-  return handleResponse<T>(response);
+  throw new Error(`Unknown PUT endpoint: ${endpoint}`);
 }
 
-export async function apiPut<T>(endpoint: string, data: unknown, token?: string): Promise<T> {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function apiDelete<T>(endpoint: string, _token?: string): Promise<T> {
+  if (endpoint.startsWith('/products/')) {
+    const deleted = simulatedApi.products.delete(endpoint.replace('/products/', ''));
+    if (!deleted) throw new Error('Product not found');
+    return { message: 'Deleted' } as T;
   }
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: 'PUT',
-    headers,
-    body: JSON.stringify(data),
-  });
-  return handleResponse<T>(response);
+  throw new Error(`Unknown DELETE endpoint: ${endpoint}`);
 }
 
-export async function apiDelete<T>(endpoint: string, token?: string): Promise<T> {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method: 'DELETE',
-    headers,
-  });
-  return handleResponse<T>(response);
-}
-
-export { API_BASE_URL };
+export const API_BASE_URL = 'http://localhost:5000/api';

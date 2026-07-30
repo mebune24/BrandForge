@@ -9,6 +9,14 @@ import {
   LogOut,
   Menu,
   X,
+  FileText,
+  Warehouse,
+  Factory,
+  Users,
+  DollarSign,
+  Truck,
+  Receipt,
+  BarChart3,
 } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
@@ -24,6 +32,14 @@ const AdminLayout: React.FC = () => {
     { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
     { to: '/admin/products', icon: Package, label: 'Products' },
     { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
+    { to: '/admin/customers', icon: Users, label: 'Customers' },
+    { to: '/admin/pricing', icon: DollarSign, label: 'Pricing' },
+    { to: '/admin/production', icon: Factory, label: 'Production' },
+    { to: '/admin/inventory', icon: Warehouse, label: 'Inventory' },
+    { to: '/admin/delivery', icon: Truck, label: 'Delivery' },
+    { to: '/admin/invoices', icon: Receipt, label: 'Invoices' },
+    { to: '/admin/blog', icon: FileText, label: 'Blog' },
+    { to: '/admin/finance', icon: BarChart3, label: 'Finance' },
   ];
 
   return (

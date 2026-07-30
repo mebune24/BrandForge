@@ -75,7 +75,7 @@ const OrdersPage: React.FC = () => {
         ) : (
           <div className="space-y-4">
             {orders.map((order) => (
-              <div key={order._id} className="bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition">
+              <Link key={order._id} to={`/order/${order.orderCode}`} className="block bg-gray-50 rounded-xl p-6 shadow hover:shadow-lg transition">
                 <div className="flex flex-wrap justify-between items-start mb-4">
                   <div>
                     <p className="text-sm text-gray-500">Order Code</p>
@@ -87,12 +87,12 @@ const OrdersPage: React.FC = () => {
                 </div>
                 <div className="border-t border-gray-200 pt-4">
                   <p className="text-sm text-gray-600 mb-2">{order.items.length} item(s)</p>
-                  <p className="text-2xl font-bold text-dark-blue-primary">${order.totalAmount.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-dark-blue-primary">FCFA{order.totalAmount.toLocaleString()}</p>
                   <p className="text-xs text-gray-500 mt-1">
                     {new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

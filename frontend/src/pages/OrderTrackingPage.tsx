@@ -86,13 +86,13 @@ const OrderTrackingPage: React.FC = () => {
                         <p className="text-xs text-gray-500 capitalize">Printing: {item.printingOption.replace(/_/g, ' ')}</p>
                       )}
                     </div>
-                    <p className="font-bold text-dark-blue-primary">${(item.unitPrice * item.quantity).toFixed(2)}</p>
+                    <p className="font-bold text-dark-blue-primary">FCFA{(item.unitPrice * item.quantity).toFixed(2)}</p>
                   </div>
                 ))}
               </div>
               <div className="mt-6 pt-4 border-t border-gray-200 flex justify-between items-center">
                 <span className="text-lg font-semibold text-gray-700">Total Amount</span>
-                <span className="text-2xl font-bold text-dark-blue-primary">${order.totalAmount.toFixed(2)}</span>
+                <span className="text-2xl font-bold text-dark-blue-primary">FCFA{order.totalAmount.toFixed(2)}</span>
               </div>
             </div>
           </div>

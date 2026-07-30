@@ -57,13 +57,13 @@ const AdminOrdersPage: React.FC = () => {
                     {order.items.length} item(s)
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-dark-blue-primary">
-                    ${order.totalAmount.toFixed(2)}
+                    FCFA{order.totalAmount.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
                       value={order.status}
                       onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                      className={`text-xs px-2 py-1 rounded-full border-0 font-semibold ${getStatusColor(order.status)}`}
+                       className={`text-xs px-2 py-1 rounded-full border-0 font-semibold ${getStatusColor(order.status)}`}
                     >
                       <option value="pending_payment">Pending Payment</option>
                       <option value="paid">Paid</option>

@@ -53,6 +53,17 @@ export interface Stat {
 export interface NavLink {
   label: string;
   href: string;
+  dropdown?: {
+    title: string;
+    items: {
+      label: string;
+      href: string;
+      description?: string;
+      icon?: string;
+      badge?: string;
+      onClick?: () => void;
+    }[];
+  };
 }
 
 export interface Feature {
@@ -62,13 +73,81 @@ export interface Feature {
 }
 
 export const navLinks: NavLink[] = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'Solutions', href: '/services' },
-  { label: 'About', href: '/about' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Contact', href: '/contact' },
+  {
+    label: 'Products',
+    href: '/products',
+    dropdown: {
+      title: 'Our Products',
+      items: [
+        { label: 'All Products', href: '/products', description: 'Browse complete catalog', icon: 'Package' },
+        { label: 'Apparel', href: '/products?category=apparel', description: 'T-shirts, polos, hoodies, caps', icon: 'Shirt' },
+        { label: 'Corporate Merchandise', href: '/products?category=merchandise', description: 'Mugs, pens, bags, notebooks', icon: 'Gift' },
+        { label: 'Uniforms', href: '/products?category=uniform', description: 'School & corporate uniforms', icon: 'Users' },
+        { label: 'Safety Wear', href: '/products?category=safety_wear', description: 'Safety vests, overalls, lab coats', icon: 'ShieldCheck' },
+        { label: 'Custom Design', href: '/ai-assistant', description: 'AI-powered design tools', icon: 'Sparkles', badge: 'New' },
+      ],
+    },
+  },
+  {
+    label: 'Services',
+    href: '/services',
+    dropdown: {
+      title: 'Printing Services',
+      items: [
+        { label: 'Textile Printing', href: '/services', description: 'DTG, screen printing, heat transfer', icon: 'Printer' },
+        { label: 'Embroidery', href: '/services', description: 'Precision embroidery for logos', icon: 'PenTool' },
+        { label: 'Corporate Branding', href: '/services', description: 'Complete brand identity solutions', icon: 'Building2' },
+        { label: 'Digital Workflows', href: '/services', description: 'Online ordering & tracking', icon: 'Smartphone' },
+        { label: 'Artwork Upload', href: '/artwork-upload', description: 'Upload & optimize your designs', icon: 'Upload' },
+        { label: '3D Mockup Preview', href: '/products', description: 'Preview before you order', icon: 'Box' },
+      ],
+    },
+  },
+  {
+    label: 'Solutions',
+    href: '/services',
+    dropdown: {
+      title: 'Solutions',
+      items: [
+        { label: 'Schools & Universities', href: '/subscriptions', description: 'Bulk uniform ordering', icon: 'GraduationCap' },
+        { label: 'Corporate Clients', href: '/subscriptions', description: 'Employee branding packages', icon: 'Building2' },
+        { label: 'NGOs & Events', href: '/subscriptions', description: 'Event merchandise solutions', icon: 'Heart' },
+        { label: 'Sports Teams', href: '/products?category=apparel', description: 'Custom jerseys & sportswear', icon: 'Trophy' },
+        { label: 'Print-on-Demand', href: '/subscriptions', description: 'Creator marketplace', icon: 'Globe', badge: 'Coming Soon' },
+        { label: 'Delivery Tracking', href: '/track', description: 'Real-time order tracking', icon: 'Truck' },
+      ],
+    },
+  },
+  {
+    label: 'Resources',
+    href: '/blog',
+    dropdown: {
+      title: 'Resources',
+      items: [
+        { label: 'Blog', href: '/blog', description: 'Latest insights & news', icon: 'FileText' },
+        { label: 'FAQ', href: '/faq', description: 'Frequently asked questions', icon: 'HelpCircle' },
+        { label: 'Reviews', href: '/reviews', description: 'Customer testimonials', icon: 'Star' },
+        { label: 'Support Center', href: '/contact', description: 'Get help from our team', icon: 'MessageCircle' },
+        { label: 'Size Guide', href: '/contact', description: 'Find your perfect fit', icon: 'Ruler' },
+        { label: 'Design Templates', href: '/ai-assistant', description: 'Free design resources', icon: 'Layout' },
+      ],
+    },
+  },
+  {
+    label: 'Company',
+    href: '/about',
+    dropdown: {
+      title: 'Company',
+      items: [
+        { label: 'About Us', href: '/about', description: 'Our story & mission', icon: 'Info' },
+        { label: 'Our Team', href: '/team', description: 'Meet the experts', icon: 'Users' },
+        { label: 'Careers', href: '/contact', description: 'Join our team', icon: 'Briefcase', badge: 'Hiring' },
+        { label: 'Partners', href: '/about', description: 'Our partners & integrations', icon: 'Handshake' },
+        { label: 'Contact', href: '/contact', description: 'Get in touch', icon: 'Mail' },
+        { label: 'Admin Access', href: '#', description: 'Admin dashboard', icon: 'Shield', onClick: () => window.dispatchEvent(new CustomEvent('open-admin-login')) },
+      ],
+    },
+  },
 ];
 
 export const serviceData: Record<TabType, ServiceCardProps[]> = {

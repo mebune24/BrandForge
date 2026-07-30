@@ -100,7 +100,7 @@ const AdminProductsPage: React.FC = () => {
               <tr key={product._id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-dark-blue-primary">{product.name}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">{product.category}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${product.basePrice.toFixed(2)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">FCFA{product.basePrice.toFixed(2)}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${product.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                     {product.isActive ? 'Active' : 'Inactive'}
@@ -152,7 +152,7 @@ const AdminProductsPage: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-dark-blue-primary mb-1">Base Price ($)</label>
+                <label className="block text-sm font-semibold text-dark-blue-primary mb-1">Base Price (FCFA)</label>
                 <input
                   type="number"
                   step="0.01"

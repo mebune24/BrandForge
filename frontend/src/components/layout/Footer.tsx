@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { useSimulatedAdmin } from '../../hooks/useSimulatedAdmin';
 
 const Footer: React.FC = () => {
+  const { openAdminLogin } = useSimulatedAdmin();
+
   return (
     <footer className="bg-dark-blue-primary text-white border-t border-white/10">
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -37,6 +40,7 @@ const Footer: React.FC = () => {
               <li><Link to="/services" className="hover:text-white transition">Embroidery</Link></li>
               <li><Link to="/services" className="hover:text-white transition">Corporate Branding</Link></li>
               <li><Link to="/services" className="hover:text-white transition">Custom Design</Link></li>
+              <li><Link to="/ai-assistant" className="hover:text-white transition">AI Design Assistant</Link></li>
             </ul>
           </div>
           <div>
@@ -45,7 +49,8 @@ const Footer: React.FC = () => {
               <li><Link to="/products" className="hover:text-white transition">Product Catalog</Link></li>
               <li><Link to="/services" className="hover:text-white transition">Digital Workflows</Link></li>
               <li><Link to="/orders" className="hover:text-white transition">Order Tracking</Link></li>
-              <li><Link to="/about" className="hover:text-white transition">Analytics</Link></li>
+              <li><Link to="/subscriptions" className="hover:text-white transition">Subscriptions</Link></li>
+              <li><Link to="/cart" className="hover:text-white transition">Cart</Link></li>
             </ul>
           </div>
           <div>
@@ -55,6 +60,8 @@ const Footer: React.FC = () => {
               <li><Link to="/team" className="hover:text-white transition">Team</Link></li>
               <li><Link to="/blog" className="hover:text-white transition">Blog</Link></li>
               <li><Link to="/contact" className="hover:text-white transition">Contact</Link></li>
+              <li><Link to="/address-book" className="hover:text-white transition">Address Book</Link></li>
+              <li><button onClick={openAdminLogin} className="hover:text-white transition text-left">Admin Access</button></li>
             </ul>
           </div>
         </div>

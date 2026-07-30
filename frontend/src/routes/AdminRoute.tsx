@@ -8,6 +8,7 @@ interface AdminRouteProps {
 
 const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
   const { isAuthenticated, isStaff, isLoading } = useAuthStatus();
+  const isSimulatedAdmin = localStorage.getItem('brandforge_simulated_admin') === 'true';
 
   if (isLoading) {
     return (
@@ -17,7 +18,7 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
     );
   }
 
-  if (!isAuthenticated || !isStaff) {
+  if ((!isAuthenticated || !isStaff) && !isSimulatedAdmin) {
     return <Navigate to="/login" replace />;
   }
 

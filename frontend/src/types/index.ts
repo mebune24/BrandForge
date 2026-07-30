@@ -19,10 +19,12 @@ export interface Product {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  badge?: 'Best Sellers' | 'New Releases' | 'Summer Collection' | 'Corporate Deals';
 }
 
 export interface OrderItem {
   product: string;
+  productName?: string;
   quantity: number;
   color?: string;
   size?: string;
@@ -94,8 +96,67 @@ export interface BlogPost {
   image: string;
   date: string;
   category: string;
+  content?: string;
 }
 
 export interface ApiError {
   message: string;
+}
+
+export interface CartItem {
+  productId: string;
+  productName: string;
+  productImage: string;
+  basePrice: number;
+  quantity: number;
+  color?: string;
+  size?: string;
+  printingOption?: string;
+  designUrl?: string;
+  unitPrice: number;
+}
+
+export interface Address {
+  _id?: string;
+  label: string;
+  fullName: string;
+  phone: string;
+  street: string;
+  city: string;
+  region: string;
+  country: string;
+  isDefault: boolean;
+}
+
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  price: number;
+  period: 'monthly' | 'quarterly' | 'yearly';
+  features: string[];
+  target: 'school' | 'business' | 'ngo' | 'individual';
+}
+
+export interface InventoryItem {
+  _id: string;
+  name: string;
+  category: string;
+  quantity: number;
+  minStock: number;
+  unit: string;
+  lastRestocked: string;
+}
+
+export interface ProductionStage {
+  key: string;
+  label: string;
+  orders: Order[];
+}
+
+export interface AnalyticsData {
+  totalRevenue: number;
+  totalOrders: number;
+  topProducts: { name: string; count: number }[];
+  monthlyRevenue: { month: string; revenue: number }[];
+  customerRetention: number;
 }

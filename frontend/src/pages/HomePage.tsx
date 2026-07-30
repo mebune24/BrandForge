@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { stats, features, serviceData, teamMembers, testimonials, blogPosts, faqs, type TabType } from '../data';
-import { Zap, Palette, ShieldCheck, CreditCard, Rocket, Mail, Phone, MapPin, Printer, PenTool, BadgeCheck, Smartphone, BarChart3, Building2, Globe, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Zap, Palette, ShieldCheck, CreditCard, Rocket, Mail, Phone, MapPin, Printer, PenTool, BadgeCheck, Smartphone, BarChart3, Building2, Globe, Lock, ChevronLeft, ChevronRight, Sparkles, User, Package, ShoppingCart } from 'lucide-react';
 import PartnersMarquee from '../components/sections/PartnersMarquee';
 import { SectionErrorBoundary } from '../components/error-boundary/SectionErrorBoundary';
 
@@ -75,14 +75,6 @@ const HomePage: React.FC = () => {
           <p className="text-gray-300 text-lg md:text-xl mt-6 leading-relaxed max-w-3xl mx-auto">
             BrandForge Technologies is an automated e-commerce printing platform bridging custom apparel production with smart digital workflows.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link to="/products" className="bg-blue-accent text-dark-blue-primary px-8 py-3 rounded-md font-semibold hover:bg-blue-400 transition shadow-lg">
-              Start Your Order
-            </Link>
-            <Link to="/services" className="border-2 border-white/30 text-white px-8 py-3 rounded-md font-semibold hover:bg-white/10 transition">
-              View Services
-            </Link>
-          </div>
 
           <div className="mt-16 flex flex-col items-center">
             <div className="w-full max-w-3xl overflow-hidden">
@@ -465,8 +457,83 @@ const HomePage: React.FC = () => {
             <Link to="/products" className="bg-blue-accent text-dark-blue-primary px-10 py-3 rounded-md font-semibold hover:bg-blue-400 transition shadow-lg">
               Request a Quote
             </Link>
-            <Link to="/contact" className="border-2 border-white/30 text-white px-10 py-3 rounded-md font-semibold hover:bg-white/10 transition">
-              Explore Solutions
+            <Link to="/subscriptions" className="border-2 border-white/30 text-white px-10 py-3 rounded-md font-semibold hover:bg-white/10 transition">
+              View Subscriptions
+            </Link>
+            <Link to="/ai-assistant" className="border-2 border-white/30 text-white px-10 py-3 rounded-md font-semibold hover:bg-white/10 transition flex items-center gap-2">
+              <Sparkles size={18} />
+              Try AI Assistant
+            </Link>
+          </div>
+        </div>
+      </section>
+      </SectionErrorBoundary>
+
+      <SectionErrorBoundary sectionName="Platform Features">
+        {/* Platform Features Section */}
+        <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <span className="text-blue-accent font-semibold text-sm uppercase tracking-wider">Platform</span>
+            <h2 className="text-4xl font-bold text-dark-blue-primary mt-2">Everything You Need to Brand Smarter</h2>
+            <p className="text-gray-600 mt-4 max-w-2xl mx-auto">From design to delivery, our platform gives you full control over your branding workflow.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Link to="/products" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                <Package size={32} className="text-blue-accent" />
+              </div>
+              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Product Catalog</h3>
+              <p className="text-sm text-gray-600">Browse apparel and merchandise with real-time pricing.</p>
+            </Link>
+            <Link to="/ai-assistant" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                <Sparkles size={32} className="text-blue-accent" />
+              </div>
+              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">AI Design Assistant</h3>
+              <p className="text-sm text-gray-600">Remove backgrounds, generate mockups, and optimize designs.</p>
+            </Link>
+            <Link to="/artwork-upload" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                <PenTool size={32} className="text-blue-accent" />
+              </div>
+              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Artwork Upload</h3>
+              <p className="text-sm text-gray-600">Upload logos and get AI-powered suggestions instantly.</p>
+            </Link>
+            <Link to="/track" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                <BarChart3 size={32} className="text-blue-accent" />
+              </div>
+              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Live Tracking</h3>
+              <p className="text-sm text-gray-600">Track your orders in real-time from production to delivery.</p>
+            </Link>
+            <Link to="/cart" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                <ShoppingCart size={32} className="text-blue-accent" />
+              </div>
+              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Smart Cart</h3>
+              <p className="text-sm text-gray-600">Manage your orders with multiple payment options.</p>
+            </Link>
+            <Link to="/subscriptions" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                <CreditCard size={32} className="text-blue-accent" />
+              </div>
+              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Subscriptions</h3>
+              <p className="text-sm text-gray-600">Recurring plans for schools, businesses, and teams.</p>
+            </Link>
+            <Link to="/reviews" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                <BadgeCheck size={32} className="text-blue-accent" />
+              </div>
+              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Reviews & Ratings</h3>
+              <p className="text-sm text-gray-600">See what customers say and share your experience.</p>
+            </Link>
+            <Link to="/profile" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                <User size={32} className="text-blue-accent" />
+              </div>
+              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Customer Profile</h3>
+              <p className="text-sm text-gray-600">Manage your profile, orders, and preferences.</p>
             </Link>
           </div>
         </div>
