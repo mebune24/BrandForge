@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, NavLink, Navigate } from 'react-router-dom';
+import { Outlet, NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { useAuthStatus } from '../../hooks/useAuth';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -22,12 +22,19 @@ import {
 const AdminLayout: React.FC = () => {
   const { isAuthenticated, isStaff } = useAuthStatus();
   const { logout } = useAuth();
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const isSimulatedAdmin = localStorage.getItem('brandforge_simulated_admin') === 'true';
 
   if (!isAuthenticated || (!isStaff && !isSimulatedAdmin)) {
     return <Navigate to="/login" replace />;
   }
+
+  const handleLogout = () => {
+    logout();
+    localStorage.removeItem('brandforge_simulated_admin');
+    navigate('/');
+  };
 
   const navItems = [
     { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
@@ -75,7 +82,7 @@ const AdminLayout: React.FC = () => {
             </NavLink>
           ))}
           <button
-            onClick={logout}
+            onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-dark-blue-secondary transition w-full"
           >
             <LogOut size={20} />
@@ -90,6 +97,9 @@ const AdminLayout: React.FC = () => {
             <Menu size={24} />
           </button>
           <span className="font-bold text-dark-blue-primary">BrandForge Admin</span>
+          <button onClick={handleLogout} className="text-gray-500 hover:text-red-600 transition" title="Logout">
+            <LogOut size={20} />
+          </button>
         </header>
         <main className="p-6">
           <Outlet />
