@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { contactInfo } from '../data';
 
 const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
+
+  const iconMap: Record<string, React.ReactNode> = {
+    Mail: <Mail size={24} className="text-blue-accent" />,
+    Phone: <Phone size={24} className="text-blue-accent" />,
+    MapPin: <MapPin size={24} className="text-blue-accent" />,
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,33 +29,17 @@ const ContactPage: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-12">
           <div>
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="bg-blue-accent/10 p-3 rounded-lg">
-                  <Mail size={24} className="text-blue-accent" />
+              {contactInfo.map((info) => (
+                <div key={info.label} className="flex items-start gap-4">
+                  <div className="bg-blue-accent/10 p-3 rounded-lg">
+                    {iconMap[info.icon]}
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">{info.label}</p>
+                    <p className="font-semibold text-dark-blue-primary">{info.value}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <p className="font-semibold text-dark-blue-primary">info@brandforgetech.com</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="bg-blue-accent/10 p-3 rounded-lg">
-                  <Phone size={24} className="text-blue-accent" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Phone</p>
-                  <p className="font-semibold text-dark-blue-primary">+1 (555) 123-4567</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="bg-blue-accent/10 p-3 rounded-lg">
-                  <MapPin size={24} className="text-blue-accent" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Address</p>
-                  <p className="font-semibold text-dark-blue-primary">123 Innovation Drive, Tech City</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
           <div className="bg-gray-50 p-8 rounded-2xl shadow-lg">

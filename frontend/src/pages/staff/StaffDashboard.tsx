@@ -1,34 +1,10 @@
 import { useStaffOrders } from '../../hooks/useOrders';
-import { Package, Clock, CheckCircle, Truck, PenTool, Settings, Warehouse, Send } from 'lucide-react';
-
-const stages = [
-  { key: 'pending_payment', label: 'Pending Payment', icon: Clock, color: 'bg-yellow-50 border-yellow-200' },
-  { key: 'paid', label: 'Paid / Ready', icon: CheckCircle, color: 'bg-green-50 border-green-200' },
-  { key: 'in_design', label: 'In Design', icon: PenTool, color: 'bg-purple-50 border-purple-200' },
-  { key: 'in_production', label: 'In Production', icon: Settings, color: 'bg-blue-50 border-blue-200' },
-  { key: 'quality_check', label: 'Quality Check', icon: Package, color: 'bg-orange-50 border-orange-200' },
-  { key: 'packaging', label: 'Packaging', icon: Warehouse, color: 'bg-indigo-50 border-indigo-200' },
-  { key: 'out_for_delivery', label: 'Out for Delivery', icon: Truck, color: 'bg-cyan-50 border-cyan-200' },
-  { key: 'delivered', label: 'Delivered', icon: Send, color: 'bg-emerald-50 border-emerald-200' },
-];
+import { getStatusColor } from '../../utils/statusConfig';
+import { PRODUCTION_STAGES } from '../../utils/orderStages';
+import { Package } from 'lucide-react';
 
 export default function StaffDashboard() {
   const { orders, loading, changeOrderStatus } = useStaffOrders();
-
-  const getStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
-      pending_payment: 'bg-yellow-100 text-yellow-800',
-      paid: 'bg-blue-100 text-blue-800',
-      in_design: 'bg-purple-100 text-purple-800',
-      in_production: 'bg-orange-100 text-orange-800',
-      quality_check: 'bg-teal-100 text-teal-800',
-      packaging: 'bg-indigo-100 text-indigo-800',
-      out_for_delivery: 'bg-cyan-100 text-cyan-800',
-      delivered: 'bg-green-100 text-green-800',
-      cancelled: 'bg-red-100 text-red-800',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
-  };
 
   if (loading) {
     return (
@@ -135,7 +111,7 @@ export default function StaffDashboard() {
       <div className="bg-white rounded-xl shadow p-6">
         <h2 className="text-xl font-bold text-dark-blue-primary mb-4">Production Pipeline</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-          {stages.map((stage) => {
+          {PRODUCTION_STAGES.map((stage) => {
             const stageOrders = orders.filter(o => o.status === stage.key);
             return (
               <div key={stage.key} className={`rounded-xl border-2 ${stage.color} p-4`}>

@@ -1,19 +1,8 @@
 import { useState } from 'react';
 import { simulatedApi } from '../../services/simulatedApi';
+import { getStatusColor, getStatusLabel, ORDER_STATUSES } from '../../utils/statusConfig';
 import LoadingSpinner from '../../components/loading/LoadingSpinner';
 import type { Order } from '../../types';
-
-const statusColors: Record<string, string> = {
-  pending_payment: 'bg-yellow-100 text-yellow-800',
-  paid: 'bg-blue-100 text-blue-800',
-  in_design: 'bg-purple-100 text-purple-800',
-  in_production: 'bg-orange-100 text-orange-800',
-  quality_check: 'bg-indigo-100 text-indigo-800',
-  packaging: 'bg-pink-100 text-pink-800',
-  out_for_delivery: 'bg-teal-100 text-teal-800',
-  delivered: 'bg-green-100 text-green-800',
-  cancelled: 'bg-red-100 text-red-800',
-};
 
 export default function DeliveryManagementPage() {
   const [orders, setOrders] = useState<Order[]>(() => simulatedApi.orders.getAll());
@@ -48,8 +37,9 @@ export default function DeliveryManagementPage() {
         <h1 className="text-2xl font-bold text-dark-blue-primary">Delivery Management</h1>
         <select value={filter} onChange={e => setFilter(e.target.value)} className="border border-gray-300 rounded-md px-3 py-2">
           <option value="all">All Orders</option>
-          <option value="out_for_delivery">Out for Delivery</option>
-          <option value="delivered">Delivered</option>
+          {ORDER_STATUSES.filter(s => ['out_for_delivery', 'delivered'].includes(s.value)).map((status) => (
+            <option key={status.value} value={status.value}>{status.label}</option>
+          ))}
         </select>
       </div>
 
@@ -70,7 +60,7 @@ export default function DeliveryManagementPage() {
                 <td className="px-6 py-4 font-mono font-bold text-dark-blue-primary">{order.orderCode}</td>
                 <td className="px-6 py-4 text-sm text-gray-600">{typeof order.customer === 'object' ? order.customer.name || order.customer.email : order.customer}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[order.status]}`}>{order.status.replace('_', ' ')}</span>
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>{getStatusLabel(order.status)}</span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600 max-w-xs truncate">{order.deliveryAddress}</td>
                 <td className="px-6 py-4 text-right text-sm">

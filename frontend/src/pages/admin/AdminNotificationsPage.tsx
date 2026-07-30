@@ -2,16 +2,7 @@ import { useState, useMemo } from 'react';
 import { SectionErrorBoundary } from '../../components/error-boundary/SectionErrorBoundary';
 import { useAdminNotifications, type AdminNotificationType } from '../../context/AdminNotificationContext';
 import { Bell, Check, CheckCheck, Trash2, Filter, X } from 'lucide-react';
-
-const typeConfig: Record<AdminNotificationType, { label: string; color: string; bg: string; border: string }> = {
-  order_update: { label: 'Order Update', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-  product_update: { label: 'Product Update', color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-200' },
-  customer_action: { label: 'Customer Action', color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
-  payment: { label: 'Payment', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-  system: { label: 'System', color: 'text-gray-600', bg: 'bg-gray-100', border: 'border-gray-200' },
-  inventory: { label: 'Inventory', color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
-  delivery: { label: 'Delivery', color: 'text-cyan-600', bg: 'bg-cyan-50', border: 'border-cyan-200' },
-};
+import { ADMIN_NOTIFICATION_TYPES } from '../../utils/notificationConfig';
 
 export default function AdminNotificationsPage() {
   const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll, deleteNotification } = useAdminNotifications();
@@ -76,8 +67,8 @@ export default function AdminNotificationsPage() {
               >
                 All
               </button>
-              {(Object.keys(typeConfig) as AdminNotificationType[]).map(type => {
-                const config = typeConfig[type];
+              {(Object.keys(ADMIN_NOTIFICATION_TYPES) as AdminNotificationType[]).map(type => {
+                const config = ADMIN_NOTIFICATION_TYPES[type];
                 return (
                   <button
                     key={type}
@@ -102,13 +93,13 @@ export default function AdminNotificationsPage() {
               <p className="text-sm text-gray-400">
                 {filter === 'all'
                   ? 'You have no notifications yet.'
-                  : `No ${typeConfig[filter as AdminNotificationType]?.label.toLowerCase()} notifications.`}
+                  : `No ${ADMIN_NOTIFICATION_TYPES[filter as AdminNotificationType]?.label.toLowerCase()} notifications.`}
               </p>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
               {sortedNotifications.map((notification) => {
-                const config = typeConfig[notification.type];
+                const config = ADMIN_NOTIFICATION_TYPES[notification.type];
                 return (
                   <div
                     key={notification.id}

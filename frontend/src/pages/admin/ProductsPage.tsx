@@ -148,11 +148,15 @@ const AdminProductsPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, category: e.target.value as CreateProductInput['category'] })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-accent"
                 >
-                  <option value="apparel">Apparel</option>
-                  <option value="merchandise">Merchandise</option>
-                  <option value="uniform">Uniform</option>
-                  <option value="safety_wear">Safety Wear</option>
-                  <option value="other">Other</option>
+                  {[
+                    { value: 'apparel', label: 'Apparel' },
+                    { value: 'merchandise', label: 'Merchandise' },
+                    { value: 'uniform', label: 'Uniform' },
+                    { value: 'safety_wear', label: 'Safety Wear' },
+                    { value: 'other', label: 'Other' },
+                  ].map((cat) => (
+                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                  ))}
                 </select>
               </div>
               <div>

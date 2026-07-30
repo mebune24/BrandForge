@@ -479,3 +479,84 @@ export const features: Feature[] = [
     desc: 'Multiple payment options with enterprise-grade security.',
   },
 ];
+
+export interface PlatformFeature {
+  icon: string;
+  title: string;
+  description: string;
+  href: string;
+}
+
+export const platformFeatures: PlatformFeature[] = [
+  { icon: 'Package', title: 'Product Catalog', description: 'Browse apparel and merchandise with real-time pricing.', href: '/products' },
+  { icon: 'Sparkles', title: 'AI Design Assistant', description: 'Remove backgrounds, generate mockups, and optimize designs.', href: '/ai-assistant' },
+  { icon: 'PenTool', title: 'Artwork Upload', description: 'Upload logos and get AI-powered suggestions instantly.', href: '/artwork-upload' },
+  { icon: 'BarChart3', title: 'Live Tracking', description: 'Track your orders in real-time from production to delivery.', href: '/track' },
+  { icon: 'ShoppingCart', title: 'Smart Cart', description: 'Manage your orders with multiple payment options.', href: '/cart' },
+  { icon: 'CreditCard', title: 'Subscriptions', description: 'Recurring plans for schools, businesses, and teams.', href: '/subscriptions' },
+  { icon: 'BadgeCheck', title: 'Reviews & Ratings', description: 'See what customers say and share your experience.', href: '/reviews' },
+  { icon: 'User', title: 'Customer Profile', description: 'Manage your profile, orders, and preferences.', href: '/profile' },
+];
+
+export interface ContactInfo {
+  icon: string;
+  label: string;
+  value: string;
+}
+
+export const contactInfo: ContactInfo[] = [
+  { icon: 'Mail', label: 'Email', value: 'info@brandforgetech.com' },
+  { icon: 'Phone', label: 'Phone', value: '+237 670 000 000' },
+  { icon: 'MapPin', label: 'Address', value: '123 Innovation Street, Douala, Cameroon' },
+];
+
+export interface AboutFeature {
+  text: string;
+}
+
+export const aboutFeatures: AboutFeature[] = [
+  { text: 'Quality Guaranteed' },
+  { text: 'Fast Turnaround Times' },
+  { text: 'Custom Branding Solutions' },
+  { text: 'Dedicated Support Team' },
+];
+
+export interface AboutImage {
+  src: string;
+  alt: string;
+}
+
+export const aboutImages: AboutImage[] = [
+  { src: 'https://images.unsplash.com/photo-1544717305-996b815c338c?w=400&h=300&fit=crop', alt: 'Team meeting' },
+  { src: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=300&fit=crop', alt: 'Office workspace' },
+  { src: 'https://images.unsplash.com/photo-1598623083058-f5b0e52d96f8?w=400&h=300&fit=crop', alt: 'Printing process' },
+  { src: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=400&h=300&fit=crop', alt: 'Design work' },
+];
+
+export interface FooterLink {
+  label: string;
+  href: string;
+}
+
+export const footerLinks = {
+  services: [
+    { label: 'Printing', href: '/services' },
+    { label: 'Embroidery', href: '/services' },
+    { label: 'Corporate Branding', href: '/services' },
+    { label: 'Custom Design', href: '/services' },
+    { label: 'AI Design Assistant', href: '/ai-assistant' },
+  ],
+  solutions: [
+    { label: 'Schools & Universities', href: '/subscriptions' },
+    { label: 'Corporate Clients', href: '/subscriptions' },
+    { label: 'NGOs & Events', href: '/subscriptions' },
+    { label: 'Sports Teams', href: '/products' },
+  ],
+  company: [
+    { label: 'About Us', href: '/about' },
+    { label: 'Our Team', href: '/team' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Contact', href: '/contact' },
+    { label: 'FAQ', href: '/faq' },
+  ],
+};

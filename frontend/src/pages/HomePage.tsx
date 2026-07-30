@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { stats, features, serviceData, teamMembers, testimonials, blogPosts, faqs, type TabType } from '../data';
+import { stats, features, serviceData, teamMembers, testimonials, blogPosts, faqs, platformFeatures, contactInfo, type TabType } from '../data';
 import { Zap, Palette, ShieldCheck, CreditCard, Rocket, Mail, Phone, MapPin, Printer, PenTool, BadgeCheck, Smartphone, BarChart3, Building2, Globe, Lock, ChevronLeft, ChevronRight, Sparkles, User, Package, ShoppingCart } from 'lucide-react';
 import PartnersMarquee from '../components/sections/PartnersMarquee';
 import { SectionErrorBoundary } from '../components/error-boundary/SectionErrorBoundary';
@@ -22,6 +22,10 @@ const iconMap: Record<string, React.ReactNode> = {
   Building2: <Building2 size={32} className="text-blue-accent" />,
   Globe: <Globe size={32} className="text-blue-accent" />,
   Lock: <Lock size={32} className="text-blue-accent" />,
+  Package: <Package size={32} className="text-blue-accent" />,
+  Sparkles: <Sparkles size={32} className="text-blue-accent" />,
+  User: <User size={32} className="text-blue-accent" />,
+  ShoppingCart: <ShoppingCart size={32} className="text-blue-accent" />,
 };
 
 const HomePage: React.FC = () => {
@@ -479,62 +483,15 @@ const HomePage: React.FC = () => {
             <p className="text-gray-600 mt-4 max-w-2xl mx-auto">From design to delivery, our platform gives you full control over your branding workflow.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link to="/products" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
-              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
-                <Package size={32} className="text-blue-accent" />
-              </div>
-              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Product Catalog</h3>
-              <p className="text-sm text-gray-600">Browse apparel and merchandise with real-time pricing.</p>
-            </Link>
-            <Link to="/ai-assistant" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
-              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
-                <Sparkles size={32} className="text-blue-accent" />
-              </div>
-              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">AI Design Assistant</h3>
-              <p className="text-sm text-gray-600">Remove backgrounds, generate mockups, and optimize designs.</p>
-            </Link>
-            <Link to="/artwork-upload" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
-              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
-                <PenTool size={32} className="text-blue-accent" />
-              </div>
-              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Artwork Upload</h3>
-              <p className="text-sm text-gray-600">Upload logos and get AI-powered suggestions instantly.</p>
-            </Link>
-            <Link to="/track" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
-              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
-                <BarChart3 size={32} className="text-blue-accent" />
-              </div>
-              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Live Tracking</h3>
-              <p className="text-sm text-gray-600">Track your orders in real-time from production to delivery.</p>
-            </Link>
-            <Link to="/cart" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
-              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
-                <ShoppingCart size={32} className="text-blue-accent" />
-              </div>
-              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Smart Cart</h3>
-              <p className="text-sm text-gray-600">Manage your orders with multiple payment options.</p>
-            </Link>
-            <Link to="/subscriptions" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
-              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
-                <CreditCard size={32} className="text-blue-accent" />
-              </div>
-              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Subscriptions</h3>
-              <p className="text-sm text-gray-600">Recurring plans for schools, businesses, and teams.</p>
-            </Link>
-            <Link to="/reviews" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
-              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
-                <BadgeCheck size={32} className="text-blue-accent" />
-              </div>
-              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Reviews & Ratings</h3>
-              <p className="text-sm text-gray-600">See what customers say and share your experience.</p>
-            </Link>
-            <Link to="/profile" className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
-              <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
-                <User size={32} className="text-blue-accent" />
-              </div>
-              <h3 className="text-lg font-bold text-dark-blue-primary mb-2">Customer Profile</h3>
-              <p className="text-sm text-gray-600">Manage your profile, orders, and preferences.</p>
-            </Link>
+            {platformFeatures.map((feature) => (
+              <Link key={feature.title} to={feature.href} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 text-center group">
+                <div className="w-16 h-16 bg-blue-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-accent/20 transition">
+                  {iconMap[feature.icon]}
+                </div>
+                <h3 className="text-lg font-bold text-dark-blue-primary mb-2">{feature.title}</h3>
+                <p className="text-sm text-gray-600">{feature.description}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -594,33 +551,17 @@ const HomePage: React.FC = () => {
                 with your printing and branding needs.
               </p>
                <div className="mt-8 space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-accent/10 p-3 rounded-lg">
-                    {iconMap['Mail']}
+                {contactInfo.map((info) => (
+                  <div key={info.label} className="flex items-center gap-4">
+                    <div className="bg-blue-accent/10 p-3 rounded-lg">
+                      {iconMap[info.icon]}
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">{info.label}</p>
+                      <p className="font-semibold text-dark-blue-primary">{info.value}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-semibold text-dark-blue-primary">info@brandforgetech.com</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-accent/10 p-3 rounded-lg">
-                    {iconMap['Phone']}
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <p className="font-semibold text-dark-blue-primary">+1 (555) 123-4567</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-accent/10 p-3 rounded-lg">
-                    {iconMap['MapPin']}
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Address</p>
-                    <p className="font-semibold text-dark-blue-primary">123 Innovation Drive, Tech City</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
             <div className="bg-white p-8 rounded-2xl shadow-lg">

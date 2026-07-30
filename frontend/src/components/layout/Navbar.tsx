@@ -10,10 +10,29 @@ import { iconMap } from '../../utils/icons';
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
   const { isAuthenticated, isStaff, user } = useAuthStatus();
   const { logout } = useAuth();
   const { cartCount } = useCart();
   const dropdownRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  useEffect(() => {
+    const updateUnreadCount = () => {
+      try {
+        const stored = localStorage.getItem('brandforge_notifications');
+        if (stored) {
+          const notifications = JSON.parse(stored);
+          const count = notifications.filter((n: { read: boolean }) => !n.read).length;
+          setUnreadCount(count);
+        }
+      } catch {
+        // ignore
+      }
+    };
+    updateUnreadCount();
+    window.addEventListener('storage', updateUnreadCount);
+    return () => window.removeEventListener('storage', updateUnreadCount);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -127,7 +146,7 @@ const Navbar: React.FC = () => {
               <Link to="/profile" className="text-gray-300 hover:text-white transition text-sm">Profile</Link>
               <Link to="/notifications" className="relative text-gray-300 hover:text-white transition">
                 <Bell size={20} />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                {unreadCount > 0 && <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">{unreadCount}</span>}
               </Link>
               <Link to="/address-book" className="text-gray-300 hover:text-white transition text-sm">Addresses</Link>
               <div className="flex items-center gap-2 text-sm text-gray-300">

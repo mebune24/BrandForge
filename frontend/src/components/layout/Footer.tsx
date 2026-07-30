@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { useSimulatedAdmin } from '../../hooks/useSimulatedAdmin';
+import { footerLinks } from '../../data';
 
 const Footer: React.FC = () => {
   const { openAdminLogin } = useSimulatedAdmin();
@@ -36,32 +37,31 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-semibold mb-4">Services</h4>
             <ul className="text-gray-400 text-sm space-y-3">
-              <li><Link to="/services" className="hover:text-white transition">Printing</Link></li>
-              <li><Link to="/services" className="hover:text-white transition">Embroidery</Link></li>
-              <li><Link to="/services" className="hover:text-white transition">Corporate Branding</Link></li>
-              <li><Link to="/services" className="hover:text-white transition">Custom Design</Link></li>
-              <li><Link to="/ai-assistant" className="hover:text-white transition">AI Design Assistant</Link></li>
+              {footerLinks.services.map((link) => (
+                <li key={link.label}><Link to={link.href} className="hover:text-white transition">{link.label}</Link></li>
+              ))}
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Solutions</h4>
             <ul className="text-gray-400 text-sm space-y-3">
-              <li><Link to="/products" className="hover:text-white transition">Product Catalog</Link></li>
-              <li><Link to="/services" className="hover:text-white transition">Digital Workflows</Link></li>
-              <li><Link to="/orders" className="hover:text-white transition">Order Tracking</Link></li>
-              <li><Link to="/subscriptions" className="hover:text-white transition">Subscriptions</Link></li>
-              <li><Link to="/cart" className="hover:text-white transition">Cart</Link></li>
+              {footerLinks.solutions.map((link) => (
+                <li key={link.label}><Link to={link.href} className="hover:text-white transition">{link.label}</Link></li>
+              ))}
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="text-gray-400 text-sm space-y-3">
-              <li><Link to="/about" className="hover:text-white transition">About Us</Link></li>
-              <li><Link to="/team" className="hover:text-white transition">Team</Link></li>
-              <li><Link to="/blog" className="hover:text-white transition">Blog</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition">Contact</Link></li>
-              <li><Link to="/address-book" className="hover:text-white transition">Address Book</Link></li>
-              <li><button onClick={openAdminLogin} className="hover:text-white transition text-left">Admin Access</button></li>
+              {footerLinks.company.map((link) => (
+                <li key={link.label}>
+                  {link.href === '#' ? (
+                    <button onClick={openAdminLogin} className="hover:text-white transition text-left">{link.label}</button>
+                  ) : (
+                    <Link to={link.href} className="hover:text-white transition">{link.label}</Link>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { aboutFeatures, aboutImages } from '../data';
 
 const AboutPage: React.FC = () => {
   return (
@@ -17,48 +18,34 @@ const AboutPage: React.FC = () => {
               a robust online ordering and tracking system.
             </p>
             <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-blue-accent">✓</span>
-                <span className="text-gray-700">Quality Guaranteed</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-blue-accent">✓</span>
-                <span className="text-gray-700">Fast Turnaround</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-blue-accent">✓</span>
-                <span className="text-gray-700">Expert Team</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-blue-accent">✓</span>
-                <span className="text-gray-700">24/7 Support</span>
-              </div>
+              {aboutFeatures.map((feature) => (
+                <div key={feature.text} className="flex items-center gap-2">
+                  <span className="text-blue-accent">✓</span>
+                  <span className="text-gray-700">{feature.text}</span>
+                </div>
+              ))}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-4">
-              <img
-                src="https://images.unsplash.com/photo-1544717305-996b815c338c?w=400&h=300&fit=crop"
-                alt="Printing"
-                className="rounded-lg shadow-lg h-48 w-full object-cover"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=300&fit=crop"
-                alt="Branding"
-                className="rounded-lg shadow-lg h-48 w-full object-cover"
-              />
+              {aboutImages.slice(0, 2).map((image) => (
+                <img
+                  key={image.src}
+                  src={image.src}
+                  alt={image.alt}
+                  className="rounded-lg shadow-lg h-48 w-full object-cover"
+                />
+              ))}
             </div>
             <div className="space-y-4 mt-8">
-              <img
-                src="https://images.unsplash.com/photo-1598623083058-f5b0e52d96f8?w=400&h=300&fit=crop"
-                alt="Textile"
-                className="rounded-lg shadow-lg h-48 w-full object-cover"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=400&h=300&fit=crop"
-                alt="Workflow"
-                className="rounded-lg shadow-lg h-48 w-full object-cover"
-              />
+              {aboutImages.slice(2, 4).map((image) => (
+                <img
+                  key={image.src}
+                  src={image.src}
+                  alt={image.alt}
+                  className="rounded-lg shadow-lg h-48 w-full object-cover"
+                />
+              ))}
             </div>
           </div>
         </div>

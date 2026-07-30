@@ -1,20 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getSimulatedOrders } from '../../utils/simulatedApi';
 import { useAdminNotifications } from '../../context/AdminNotificationContext';
+import { PRODUCTION_STAGES } from '../../utils/orderStages';
 import LoadingSpinner from '../../components/loading/LoadingSpinner';
 import type { Order } from '../../types';
-import { ChevronRight, ChevronLeft, Package, Clock, CheckCircle, Truck, PenTool, Settings, Warehouse, Send } from 'lucide-react';
-
-const stages = [
-  { key: 'pending_payment', label: 'Pending Payment', icon: Clock, color: 'bg-yellow-50 border-yellow-200' },
-  { key: 'paid', label: 'Paid / Ready', icon: CheckCircle, color: 'bg-green-50 border-green-200' },
-  { key: 'in_design', label: 'In Design', icon: PenTool, color: 'bg-purple-50 border-purple-200' },
-  { key: 'in_production', label: 'In Production', icon: Settings, color: 'bg-blue-50 border-blue-200' },
-  { key: 'quality_check', label: 'Quality Check', icon: Package, color: 'bg-orange-50 border-orange-200' },
-  { key: 'packaging', label: 'Packaging', icon: Warehouse, color: 'bg-indigo-50 border-indigo-200' },
-  { key: 'out_for_delivery', label: 'Out for Delivery', icon: Truck, color: 'bg-cyan-50 border-cyan-200' },
-  { key: 'delivered', label: 'Delivered', icon: Send, color: 'bg-emerald-50 border-emerald-200' },
-];
+import { ChevronRight, ChevronLeft, Package } from 'lucide-react';
 
 export default function ProductionDashboard() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -37,7 +27,7 @@ export default function ProductionDashboard() {
       allOrders[idx].status = newStatus as Order['status'];
       localStorage.setItem('brandforge_simulated_orders', JSON.stringify(allOrders));
       setOrders([...allOrders]);
-      const stageLabel = stages.find(s => s.key === newStatus)?.label || newStatus;
+      const stageLabel = PRODUCTION_STAGES.find(s => s.key === newStatus)?.label || newStatus;
       addNotification(
         `Order ${order.orderCode} moved to ${stageLabel}`,
         'order_update',
@@ -67,7 +57,7 @@ export default function ProductionDashboard() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-dark-blue-primary">Production Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Track and manage order production stages</p>
+          <p className="text-sm text-gray-500 mt-1">Track and manage order production PRODUCTION_STAGES</p>
         </div>
         <div className="flex items-center gap-3">
           <select
@@ -76,16 +66,16 @@ export default function ProductionDashboard() {
             className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-accent focus:border-transparent"
           >
             <option value="all">All Stages</option>
-            {stages.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+            {PRODUCTION_STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
           </select>
         </div>
       </div>
 
       <div className="relative">
         <div className="flex gap-4 overflow-x-auto pb-4 scroll-smooth" id="kanban-board" style={{ scrollbarWidth: 'thin' }}>
-          {stages.map((stage) => {
+          {PRODUCTION_STAGES.map((stage) => {
             const stageOrders = filteredOrders.filter((o: Order) => o.status === stage.key);
-            const currentStageIndex = stages.findIndex(s => s.key === stage.key);
+            const currentStageIndex = PRODUCTION_STAGES.findIndex(s => s.key === stage.key);
 
             return (
               <div key={stage.key} className="flex-shrink-0 w-72">
@@ -133,19 +123,19 @@ export default function ProductionDashboard() {
                           <div className="mt-3 flex gap-2">
                             {currentStageIndex > 0 && (
                               <button
-                                onClick={() => moveOrder(order._id, stages[currentStageIndex - 1].key)}
+                                onClick={() => moveOrder(order._id, PRODUCTION_STAGES[currentStageIndex - 1].key)}
                                 className="flex-1 text-xs bg-gray-100 text-gray-700 px-2 py-1.5 rounded hover:bg-gray-200 transition flex items-center justify-center gap-1"
-                                title={`Move to ${stages[currentStageIndex - 1].label}`}
+                                title={`Move to ${PRODUCTION_STAGES[currentStageIndex - 1].label}`}
                               >
                                 <ChevronLeft size={12} />
                                 Back
                               </button>
                             )}
-                            {currentStageIndex < stages.length - 1 && (
+                            {currentStageIndex < PRODUCTION_STAGES.length - 1 && (
                               <button
-                                onClick={() => moveOrder(order._id, stages[currentStageIndex + 1].key)}
+                                onClick={() => moveOrder(order._id, PRODUCTION_STAGES[currentStageIndex + 1].key)}
                                 className="flex-1 text-xs bg-blue-accent text-dark-blue-primary px-2 py-1.5 rounded hover:bg-blue-400 transition font-semibold flex items-center justify-center gap-1"
-                                title={`Move to ${stages[currentStageIndex + 1].label}`}
+                                title={`Move to ${PRODUCTION_STAGES[currentStageIndex + 1].label}`}
                               >
                                 Advance
                                 <ChevronRight size={12} />

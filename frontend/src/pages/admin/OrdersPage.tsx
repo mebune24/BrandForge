@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useOrders } from '../../hooks/useOrders';
 import { useAdminNotifications } from '../../context/AdminNotificationContext';
 import { simulatedApi } from '../../services/simulatedApi';
+import { getStatusColor, getStatusLabel, ORDER_STATUSES } from '../../utils/statusConfig';
 import type { User } from '../../types';
 
 const AdminOrdersPage: React.FC = () => {
@@ -14,27 +15,12 @@ const AdminOrdersPage: React.FC = () => {
 
   const [assigningOrderId, setAssigningOrderId] = useState<string | null>(null);
 
-  const getStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
-      pending_payment: 'bg-yellow-100 text-yellow-800',
-      paid: 'bg-blue-100 text-blue-800',
-      in_design: 'bg-purple-100 text-purple-800',
-      in_production: 'bg-orange-100 text-orange-800',
-      quality_check: 'bg-teal-100 text-teal-800',
-      packaging: 'bg-indigo-100 text-indigo-800',
-      out_for_delivery: 'bg-cyan-100 text-cyan-800',
-      delivered: 'bg-green-100 text-green-800',
-      cancelled: 'bg-red-100 text-red-800',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
-  };
-
   const handleStatusChange = async (orderId: string, newStatus: string) => {
     const order = orders.find(o => o._id === orderId);
     await changeOrderStatus(orderId, newStatus);
     if (order) {
       addNotification(
-        `Order ${order.orderCode} status changed to ${newStatus.replace(/_/g, ' ')}`,
+        `Order ${order.orderCode} status changed to ${getStatusLabel(newStatus)}`,
         'order_update',
         `order:${orderId}`
       );
@@ -93,23 +79,17 @@ const AdminOrdersPage: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-dark-blue-primary">
                     FCFA{order.totalAmount.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <select
-                      value={order.status}
-                      onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                      className={`text-xs px-2 py-1 rounded-full border-0 font-semibold ${getStatusColor(order.status)}`}
-                    >
-                      <option value="pending_payment">Pending Payment</option>
-                      <option value="paid">Paid</option>
-                      <option value="in_design">In Design</option>
-                      <option value="in_production">In Production</option>
-                      <option value="quality_check">Quality Check</option>
-                      <option value="packaging">Packaging</option>
-                      <option value="out_for_delivery">Out for Delivery</option>
-                      <option value="delivered">Delivered</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
-                  </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <select
+                        value={order.status}
+                        onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                        className={`text-xs px-2 py-1 rounded-full border-0 font-semibold ${getStatusColor(order.status)}`}
+                      >
+                        {ORDER_STATUSES.map((status) => (
+                          <option key={status.value} value={status.value}>{status.label}</option>
+                        ))}
+                      </select>
+                    </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {assigningOrderId === order._id ? (
                       <div className="flex items-center gap-2">
