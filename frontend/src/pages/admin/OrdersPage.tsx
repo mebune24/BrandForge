@@ -1,8 +1,10 @@
 import React from 'react';
 import { useOrders } from '../../hooks/useOrders';
+import { useAdminNotifications } from '../../context/AdminNotificationContext';
 
 const AdminOrdersPage: React.FC = () => {
   const { orders, loading, changeOrderStatus } = useOrders(true);
+  const { addNotification } = useAdminNotifications();
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -20,7 +22,15 @@ const AdminOrdersPage: React.FC = () => {
   };
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
+    const order = orders.find(o => o._id === orderId);
     await changeOrderStatus(orderId, newStatus);
+    if (order) {
+      addNotification(
+        `Order ${order.orderCode} status changed to ${newStatus.replace(/_/g, ' ')}`,
+        'order_update',
+        `order:${orderId}`
+      );
+    }
   };
 
   if (loading) {

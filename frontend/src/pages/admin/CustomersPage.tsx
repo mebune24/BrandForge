@@ -3,6 +3,7 @@ import { Eye, Shield, Trash2, Search } from 'lucide-react';
 import LoadingSpinner from '../../components/loading/LoadingSpinner';
 import { SectionErrorBoundary } from '../../components/error-boundary/SectionErrorBoundary';
 import { getSimulatedOrders } from '../../utils/simulatedApi';
+import { useAdminNotifications } from '../../context/AdminNotificationContext';
 import type { User } from '../../types';
 
 interface Customer extends User {
@@ -11,6 +12,7 @@ interface Customer extends User {
 }
 
 export default function CustomersPage() {
+  const { addNotification } = useAdminNotifications();
   const [customers, setCustomers] = useState<Customer[]>(() => {
     try {
       const raw = localStorage.getItem('brandforge_users');
@@ -44,9 +46,13 @@ export default function CustomersPage() {
     const raw = localStorage.getItem('brandforge_users');
     if (!raw) return;
     const stored = JSON.parse(raw);
+    const customer = stored.find((u: { _id: string; name: string }) => u._id === id);
     const updated = stored.filter((u: { _id: string }) => u._id !== id);
     localStorage.setItem('brandforge_users', JSON.stringify(updated));
     setCustomers(prev => prev.filter(c => c._id !== id));
+    if (customer) {
+      addNotification(`Customer "${customer.name}" has been removed`, 'customer_action', `customer:${id}`);
+    }
   };
 
   const handleRoleChange = (customerId: string, newRole: Customer['role']) => {
@@ -54,11 +60,15 @@ export default function CustomersPage() {
     if (!raw) return;
     const stored = JSON.parse(raw);
     const idx = stored.findIndex((u: { _id: string }) => u._id === customerId);
+    const customer = stored[idx];
     if (idx !== -1) {
       stored[idx].role = newRole;
       localStorage.setItem('brandforge_users', JSON.stringify(stored));
       setCustomers(prev => prev.map(c => c._id === customerId ? { ...c, role: newRole } : c));
       setRoleModal({ open: false, customer: null });
+      if (customer) {
+        addNotification(`Customer "${customer.name}" role changed to ${newRole}`, 'customer_action', `customer:${customerId}`);
+      }
     }
   };
 

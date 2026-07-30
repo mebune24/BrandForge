@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useProducts } from '../../hooks/useProducts';
+import { useAdminNotifications } from '../../context/AdminNotificationContext';
 import type { CreateProductInput, Product } from '../../types';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 
 const AdminProductsPage: React.FC = () => {
   const { products, loading, addProduct, editProduct, removeProduct } = useProducts();
+  const { addNotification } = useAdminNotifications();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState<CreateProductInput>({
@@ -52,8 +54,10 @@ const AdminProductsPage: React.FC = () => {
     try {
       if (editingProduct) {
         await editProduct(editingProduct._id, formData);
+        addNotification(`Product "${formData.name}" has been updated`, 'product_update', `product:${editingProduct._id}`);
       } else {
         await addProduct(formData);
+        addNotification(`New product "${formData.name}" has been created`, 'product_update');
       }
       setIsModalOpen(false);
     } catch {
@@ -61,10 +65,10 @@ const AdminProductsPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to deactivate this product?')) {
-      await removeProduct(id);
-    }
+  const handleDelete = async (id: string, name: string) => {
+    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) return;
+    await removeProduct(id);
+    addNotification(`Product "${name}" has been deleted`, 'product_update', `product:${id}`);
   };
 
   if (loading) {
@@ -110,7 +114,7 @@ const AdminProductsPage: React.FC = () => {
                   <button onClick={() => openModal(product)} className="text-blue-accent hover:text-blue-600 mr-3">
                     <Pencil size={16} />
                   </button>
-                  <button onClick={() => handleDelete(product._id)} className="text-red-600 hover:text-red-800">
+                  <button onClick={() => handleDelete(product._id, product.name)} className="text-red-600 hover:text-red-800">
                     <Trash2 size={16} />
                   </button>
                 </td>

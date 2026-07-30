@@ -2,15 +2,26 @@ import React from 'react';
 import { Package, ShoppingCart, Users, DollarSign, TrendingUp, BarChart3 } from 'lucide-react';
 import { useProducts } from '../../hooks/useProducts';
 import { useOrders } from '../../hooks/useOrders';
+import { useAdminNotifications } from '../../context/AdminNotificationContext';
 import { simulatedApi } from '../../utils/simulatedApi';
 
 const DashboardPage: React.FC = () => {
   const { products } = useProducts();
   const { orders } = useOrders(true);
+  const { addNotification } = useAdminNotifications();
   const analytics = simulatedApi.analytics.getData();
 
   const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
   const pendingOrders = orders.filter(o => o.status === 'pending_payment' || o.status === 'paid').length;
+
+  React.useEffect(() => {
+    if (pendingOrders > 0) {
+      addNotification(`You have ${pendingOrders} pending order${pendingOrders !== 1 ? 's' : ''} requiring attention`, 'order_update');
+    }
+    if (orders.filter(o => o.status === 'out_for_delivery').length > 0) {
+      addNotification(`${orders.filter(o => o.status === 'out_for_delivery').length} order${orders.filter(o => o.status === 'out_for_delivery').length !== 1 ? 's' : ''} out for delivery`, 'delivery');
+    }
+  }, [orders, pendingOrders, addNotification]);
 
   const stats = [
     { label: 'Total Products', value: products.length, icon: Package, color: 'bg-blue-500' },

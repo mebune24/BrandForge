@@ -3,6 +3,7 @@ import { Edit3, Save, TrendingUp, History } from 'lucide-react';
 import LoadingSpinner from '../../components/loading/LoadingSpinner';
 import { SectionErrorBoundary } from '../../components/error-boundary/SectionErrorBoundary';
 import { simulatedApi } from '../../services/simulatedApi';
+import { useAdminNotifications } from '../../context/AdminNotificationContext';
 import type { Product } from '../../types';
 
 interface PriceHistoryEntry {
@@ -15,6 +16,7 @@ interface PriceHistoryEntry {
 }
 
 export default function PricingPage() {
+  const { addNotification } = useAdminNotifications();
   const [products, setProducts] = useState<Product[]>(() => simulatedApi.products.getAll());
   const [loading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -61,6 +63,7 @@ export default function PricingPage() {
       setEditingId(null);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
+      addNotification(`Price updated for "${product.name}": FCFA${product.basePrice.toLocaleString()} → FCFA${newPrice.toLocaleString()}`, 'product_update', `product:${productId}`);
     }
   };
 
@@ -91,6 +94,7 @@ export default function PricingPage() {
     setBulkPercent('');
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+    addNotification(`Bulk price adjustment applied: ${pct >= 0 ? '+' : ''}${pct}% across ${updated.length} products`, 'product_update');
   };
 
   const formatCurrency = (val: number) => `FCFA${val.toLocaleString()}`;

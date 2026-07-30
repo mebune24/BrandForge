@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { AppProvider } from './context/AppContext';
 import { CartProvider } from './context/CartContext';
 import { SubscriptionProvider } from './context/SubscriptionContext';
+import { AdminNotificationProvider } from './context/AdminNotificationContext';
 import Layout from './components/layout/Layout';
 import AdminLayout from './pages/admin/AdminLayout';
 import { ErrorBoundary } from './components/error-boundary/ErrorBoundary';
@@ -41,9 +42,11 @@ const App: React.FC = () => {
                       <Route
                         path="/admin"
                         element={
-                          <AdminRoute>
-                            <AdminLayout />
-                          </AdminRoute>
+                          <AdminNotificationProvider>
+                            <AdminRoute>
+                              <AdminLayout />
+                            </AdminRoute>
+                          </AdminNotificationProvider>
                         }
                       >
                         {adminRoutes.map((route) => (

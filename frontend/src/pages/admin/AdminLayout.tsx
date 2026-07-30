@@ -18,6 +18,7 @@ import {
   Receipt,
   BarChart3,
 } from 'lucide-react';
+import AdminBellIcon from '../../components/admin/AdminBellIcon';
 
 const AdminLayout: React.FC = () => {
   const { isAuthenticated, isStaff } = useAuthStatus();
@@ -99,14 +100,17 @@ const AdminLayout: React.FC = () => {
             </button>
             <span className="font-bold text-dark-blue-primary">BrandForge Admin</span>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition font-medium text-sm"
-            title="Logout"
-          >
-            <LogOut size={18} />
-            <span className="hidden sm:inline">Logout</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <AdminBellIcon />
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition font-medium text-sm"
+              title="Logout"
+            >
+              <LogOut size={18} />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+          </div>
         </header>
         <main className="p-6">
           <Outlet />

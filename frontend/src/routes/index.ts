@@ -43,4 +43,5 @@ export const adminRoutes = [
   { path: 'invoices', element: lazy(() => import('../pages/admin/InvoicePage')), index: false },
   { path: 'blog', element: lazy(() => import('../pages/admin/BlogAdminPage')), index: false },
   { path: 'finance', element: lazy(() => import('../pages/admin/FinancialReportsPage')) },
+  { path: 'notifications', element: lazy(() => import('../pages/admin/AdminNotificationsPage')) },
 ];

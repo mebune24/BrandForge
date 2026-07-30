@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getSimulatedOrders } from '../../utils/simulatedApi';
+import { useAdminNotifications } from '../../context/AdminNotificationContext';
 import LoadingSpinner from '../../components/loading/LoadingSpinner';
 import type { Order } from '../../types';
 import { ChevronRight, ChevronLeft, Package, Clock, CheckCircle, Truck, PenTool, Settings, Warehouse, Send } from 'lucide-react';
@@ -20,6 +21,7 @@ export default function ProductionDashboard() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [scrollPosition, setScrollPosition] = useState(0);
+  const { addNotification } = useAdminNotifications();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -29,21 +31,28 @@ export default function ProductionDashboard() {
 
   const moveOrder = (orderId: string, newStatus: string) => {
     const allOrders = JSON.parse(localStorage.getItem('brandforge_simulated_orders') || '[]') as Order[];
-    const idx = allOrders.findIndex(o => o._id === orderId);
+    const idx = allOrders.findIndex((o: Order) => o._id === orderId);
     if (idx !== -1) {
+      const order = allOrders[idx];
       allOrders[idx].status = newStatus as Order['status'];
       localStorage.setItem('brandforge_simulated_orders', JSON.stringify(allOrders));
       setOrders([...allOrders]);
+      const stageLabel = stages.find(s => s.key === newStatus)?.label || newStatus;
+      addNotification(
+        `Order ${order.orderCode} moved to ${stageLabel}`,
+        'order_update',
+        `order:${orderId}`
+      );
     }
   };
 
-  const filteredOrders = filter === 'all' ? orders : orders.filter(o => o.status === filter);
+  const filteredOrders = filter === 'all' ? orders : orders.filter((o: Order) => o.status === filter);
 
   const scrollBoard = (direction: 'left' | 'right') => {
     const board = document.getElementById('kanban-board');
     if (board) {
       const scrollAmount = 320;
-      const newPosition = direction === 'left' 
+      const newPosition = direction === 'left'
         ? Math.max(0, scrollPosition - scrollAmount)
         : scrollPosition + scrollAmount;
       board.scrollTo({ left: newPosition, behavior: 'smooth' });
@@ -61,9 +70,9 @@ export default function ProductionDashboard() {
           <p className="text-sm text-gray-500 mt-1">Track and manage order production stages</p>
         </div>
         <div className="flex items-center gap-3">
-          <select 
-            value={filter} 
-            onChange={e => setFilter(e.target.value)} 
+          <select
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
             className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-accent focus:border-transparent"
           >
             <option value="all">All Stages</option>
@@ -75,9 +84,9 @@ export default function ProductionDashboard() {
       <div className="relative">
         <div className="flex gap-4 overflow-x-auto pb-4 scroll-smooth" id="kanban-board" style={{ scrollbarWidth: 'thin' }}>
           {stages.map((stage) => {
-            const stageOrders = filteredOrders.filter(o => o.status === stage.key);
+            const stageOrders = filteredOrders.filter((o: Order) => o.status === stage.key);
             const currentStageIndex = stages.findIndex(s => s.key === stage.key);
-            
+
             return (
               <div key={stage.key} className="flex-shrink-0 w-72">
                 <div className={`rounded-xl border-2 ${stage.color} p-4 h-full`}>
@@ -90,7 +99,7 @@ export default function ProductionDashboard() {
                       {stageOrders.length}
                     </span>
                   </div>
-                  
+
                   <div className="space-y-3">
                     {stageOrders.length === 0 ? (
                       <div className="bg-white/60 rounded-lg p-6 text-center border-2 border-dashed border-gray-300">
@@ -98,12 +107,12 @@ export default function ProductionDashboard() {
                         <p className="text-xs text-gray-400">No orders in this stage</p>
                       </div>
                     ) : (
-                      stageOrders.map((order) => (
+                      stageOrders.map((order: Order) => (
                         <div key={order._id} className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                           <div className="flex items-start justify-between mb-2">
                             <p className="font-bold text-sm text-dark-blue-primary font-mono tracking-wide">{order.orderCode}</p>
                           </div>
-                          
+
                           <div className="mb-3">
                             <p className="text-xs text-gray-500">
                               {typeof order.customer === 'string' ? order.customer : order.customer?.name || 'Guest'}
@@ -114,16 +123,16 @@ export default function ProductionDashboard() {
                               </p>
                             )}
                           </div>
-                          
+
                           <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                             <p className="text-sm font-bold text-dark-blue-primary">
                               FCFA{order.totalAmount.toLocaleString()}
                             </p>
                           </div>
-                          
+
                           <div className="mt-3 flex gap-2">
                             {currentStageIndex > 0 && (
-                              <button 
+                              <button
                                 onClick={() => moveOrder(order._id, stages[currentStageIndex - 1].key)}
                                 className="flex-1 text-xs bg-gray-100 text-gray-700 px-2 py-1.5 rounded hover:bg-gray-200 transition flex items-center justify-center gap-1"
                                 title={`Move to ${stages[currentStageIndex - 1].label}`}
@@ -133,7 +142,7 @@ export default function ProductionDashboard() {
                               </button>
                             )}
                             {currentStageIndex < stages.length - 1 && (
-                              <button 
+                              <button
                                 onClick={() => moveOrder(order._id, stages[currentStageIndex + 1].key)}
                                 className="flex-1 text-xs bg-blue-accent text-dark-blue-primary px-2 py-1.5 rounded hover:bg-blue-400 transition font-semibold flex items-center justify-center gap-1"
                                 title={`Move to ${stages[currentStageIndex + 1].label}`}
@@ -152,15 +161,15 @@ export default function ProductionDashboard() {
             );
           })}
         </div>
-        
-        <button 
+
+        <button
           onClick={() => scrollBoard('left')}
           className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white shadow-lg rounded-full p-2 hover:bg-gray-50 transition z-10 border border-gray-200"
           title="Scroll left"
         >
           <ChevronLeft size={20} className="text-gray-600" />
         </button>
-        <button 
+        <button
           onClick={() => scrollBoard('right')}
           className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white shadow-lg rounded-full p-2 hover:bg-gray-50 transition z-10 border border-gray-200"
           title="Scroll right"
