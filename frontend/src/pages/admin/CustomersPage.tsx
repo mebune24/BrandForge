@@ -154,7 +154,6 @@ export default function CustomersPage() {
                 <div><span className="font-semibold text-gray-500">Name:</span> <span className="text-dark-blue-primary">{selectedCustomer.name}</span></div>
                 <div><span className="font-semibold text-gray-500">Email:</span> <span className="text-dark-blue-primary">{selectedCustomer.email}</span></div>
                 <div><span className="font-semibold text-gray-500">Role:</span> <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getRoleBadge(selectedCustomer.role)}`}>{selectedCustomer.role}</span></div>
-                <div><span className="font-semibold text-gray-500">Phone:</span> <span className="text-dark-blue-primary">{selectedCustomer.phone || '-'}</span></div>
                 <div><span className="font-semibold text-gray-500">Total Orders:</span> <span className="text-dark-blue-primary">{getOrderCount(selectedCustomer._id)}</span></div>
               </div>
               <button onClick={() => setSelectedCustomer(null)} className="mt-6 w-full bg-dark-blue-primary text-white py-2 rounded-lg hover:bg-blue-900 transition">Close</button>
