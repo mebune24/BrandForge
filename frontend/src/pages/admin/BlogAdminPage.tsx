@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { simulatedApi } from '../../utils/simulatedApi';
+import { useAdminNotifications } from '../../context/AdminNotificationContext';
 import LoadingSpinner from '../../components/loading/LoadingSpinner';
 import type { BlogPost } from '../../types';
 
@@ -9,12 +10,17 @@ export default function BlogAdminPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({ title: '', excerpt: '', image: '', category: 'Technology', content: '' });
+  const { addNotification } = useAdminNotifications();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPosts(simulatedApi.blogPosts.getAll());
     setLoading(false);
   }, []);
+
+  const refresh = () => {
+    setPosts(simulatedApi.blogPosts.getAll());
+  };
 
   const handleSubmit = () => {
     if (!form.title || !form.excerpt) {
@@ -23,11 +29,13 @@ export default function BlogAdminPage() {
     }
     if (editingId) {
       simulatedApi.blogPosts.update(editingId, form);
+      addNotification(`Blog post "${form.title}" updated`, 'product_update', `blog:${editingId}`);
       setEditingId(null);
     } else {
-      simulatedApi.blogPosts.create({ ...form, date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) });
+      const newPost = simulatedApi.blogPosts.create({ ...form, date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) });
+      addNotification(`New blog post "${form.title}" published`, 'product_update', `blog:${newPost.id}`);
     }
-    setPosts(simulatedApi.blogPosts.getAll());
+    refresh();
     setShowForm(false);
     setForm({ title: '', excerpt: '', image: '', category: 'Technology', content: '' });
   };
@@ -39,9 +47,13 @@ export default function BlogAdminPage() {
   };
 
   const handleDelete = (id: number) => {
+    const post = posts.find(p => p.id === id);
     if (confirm('Delete this post?')) {
       simulatedApi.blogPosts.delete(id);
-      setPosts(simulatedApi.blogPosts.getAll());
+      refresh();
+      if (post) {
+        addNotification(`Blog post "${post.title}" deleted`, 'product_update', `blog:${id}`);
+      }
     }
   };
 

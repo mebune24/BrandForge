@@ -7,6 +7,7 @@ export const publicRoutes = [
   { path: '/team', element: lazy(() => import('../pages/TeamPage')) },
   { path: '/testimonials', element: lazy(() => import('../pages/TestimonialsPage')) },
   { path: '/blog', element: lazy(() => import('../pages/BlogPage')) },
+  { path: '/blog/:id', element: lazy(() => import('../pages/BlogDetailPage')) },
   { path: '/contact', element: lazy(() => import('../pages/ContactPage')) },
   { path: '/faq', element: lazy(() => import('../pages/FAQPage')) },
   { path: '/products', element: lazy(() => import('../pages/ProductsPage')) },

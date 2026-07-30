@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { stats, features, serviceData, teamMembers, testimonials, blogPosts, faqs, platformFeatures, contactInfo, type TabType } from '../data';
+import { stats, features, serviceData, teamMembers, testimonials, faqs, platformFeatures, contactInfo, type TabType } from '../data';
 import { Zap, Palette, ShieldCheck, CreditCard, Rocket, Mail, Phone, MapPin, Printer, PenTool, BadgeCheck, Smartphone, BarChart3, Building2, Globe, Lock, ChevronLeft, ChevronRight, Sparkles, User, Package, ShoppingCart } from 'lucide-react';
 import PartnersMarquee from '../components/sections/PartnersMarquee';
 import { SectionErrorBoundary } from '../components/error-boundary/SectionErrorBoundary';
+import { useBlog } from '../hooks/useBlog';
 
 const iconMap: Record<string, React.ReactNode> = {
   Zap: <Zap size={32} className="text-blue-accent" />,
@@ -33,6 +34,7 @@ const HomePage: React.FC = () => {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(1);
+  const { posts: blogPosts, loading: blogLoading } = useBlog();
 
   useEffect(() => {
     const updateItemsPerView = () => {
@@ -509,25 +511,35 @@ const HomePage: React.FC = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {blogPosts.map((post) => (
-              <div key={post.id} className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group">
-                <div className="h-56 overflow-hidden relative">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <span className="absolute top-4 left-4 bg-blue-accent text-white px-3 py-1 rounded-full text-xs font-semibold">
-                    {post.category}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <p className="text-gray-500 text-xs mb-2">{post.date}</p>
-                  <h3 className="text-dark-blue-primary text-lg font-bold mb-2">{post.title}</h3>
-                  <p className="text-gray-600 text-sm">{post.excerpt}</p>
-                </div>
+            {blogLoading ? (
+              [1, 2, 3].map(i => (
+                <div key={i} className="bg-gray-200 rounded-xl h-80 animate-pulse"></div>
+              ))
+            ) : blogPosts.length === 0 ? (
+              <div className="col-span-3 text-center py-12">
+                <p className="text-gray-500">No articles published yet.</p>
               </div>
-            ))}
+            ) : (
+              blogPosts.slice(0, 3).map((post) => (
+                <Link key={post.id} to={`/blog/${post.id}`} className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group block">
+                  <div className="h-56 overflow-hidden relative">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <span className="absolute top-4 left-4 bg-blue-accent text-white px-3 py-1 rounded-full text-xs font-semibold">
+                      {post.category}
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-gray-500 text-xs mb-2">{post.date}</p>
+                    <h3 className="text-dark-blue-primary text-lg font-bold mb-2 group-hover:text-blue-accent transition">{post.title}</h3>
+                    <p className="text-gray-600 text-sm line-clamp-2">{post.excerpt}</p>
+                  </div>
+                </Link>
+              ))
+            )}
           </div>
           <div className="text-center mt-8">
             <Link to="/blog" className="text-blue-accent font-semibold hover:text-dark-blue-primary transition">

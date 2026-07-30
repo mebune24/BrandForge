@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { blogPosts } from '../data';
+import { simulatedApi } from '../utils/simulatedApi';
 import type { BlogPost } from '../types';
 
 export function useBlog() {
@@ -8,11 +8,15 @@ export function useBlog() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setPosts(blogPosts);
+      setPosts(simulatedApi.blogPosts.getAll());
       setLoading(false);
-    }, 500);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
-  return { posts, loading };
+  const refresh = () => {
+    setPosts(simulatedApi.blogPosts.getAll());
+  };
+
+  return { posts, loading, refresh };
 }
