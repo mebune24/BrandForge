@@ -27,7 +27,7 @@ const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const isSimulatedAdmin = localStorage.getItem('brandforge_simulated_admin') === 'true';
 
-  if (!isAuthenticated || (!isStaff && !isSimulatedAdmin)) {
+  if ((!isAuthenticated || !isStaff) && !isSimulatedAdmin) {
     return <Navigate to="/login" replace />;
   }
 
