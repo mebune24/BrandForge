@@ -92,13 +92,20 @@ const AdminLayout: React.FC = () => {
       </aside>
 
       <div className="flex-1 lg:ml-64">
-        <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between lg:hidden">
-          <button onClick={() => setSidebarOpen(true)}>
-            <Menu size={24} />
-          </button>
-          <span className="font-bold text-dark-blue-primary">BrandForge Admin</span>
-          <button onClick={handleLogout} className="text-gray-500 hover:text-red-600 transition" title="Logout">
-            <LogOut size={20} />
+        <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden">
+              <Menu size={24} />
+            </button>
+            <span className="font-bold text-dark-blue-primary">BrandForge Admin</span>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition font-medium text-sm"
+            title="Logout"
+          >
+            <LogOut size={18} />
+            <span className="hidden sm:inline">Logout</span>
           </button>
         </header>
         <main className="p-6">
